@@ -1,3 +1,26 @@
+HAND-32 is a hardware target overlay for Retro-Go. It is not a fork
+and does not include Retro-Go source.
+
+  Retro-Go  https://github.com/ducalex/retro-go
+  Author    ducalex (Alex Duchesne) and contributors
+  License   GNU General Public License v2.0
+            https://github.com/ducalex/retro-go/blob/master/COPYING
+
+            Exceptions (from Retro-Go README):
+              fMSX  — custom non-commercial license
+              handy — zlib
+
+When this overlay is applied to Retro-Go, the combined firmware is a
+modified work of Retro-Go and must be distributed under Retro-Go's
+licenses (GPLv2, plus the exceptions above). Provide corresponding
+source: the ducalex/retro-go tree plus this overlay.
+
+----------------------------------------------------------------------
+
+The following files in THIS repository (pin map, target config, docs,
+wiring, apply.py) are original to HAND-32 and are MIT-licensed when
+distributed on their own, not as part of a Retro-Go binary:
+
 MIT License
 
 Copyright (c) 2026 Dale Wilcox / HAND-32
