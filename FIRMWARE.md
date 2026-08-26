@@ -1,8 +1,12 @@
 # HAND-32 firmware
 
+This is a **hardware port** of [Retro-Go](https://github.com/ducalex/retro-go) by [ducalex](https://github.com/ducalex) (Alex Duchesne) and contributors. Not a fork. Attribution: [CREDITS.md](CREDITS.md).
+
 Target name: `hiletgo-ws2-ns4168`. Single flash image (`build-img` + `install`).
 
 ## Apps in the image
+
+All of these are Retro-Go applications, compiled from upstream.
 
 | App | In firmware | Systems |
 |---|---|---|
@@ -39,7 +43,7 @@ python -m esptool --chip esp32s3 write_flash --flash_size detect 0x0 hand32.img
 
 ## Partitions
 
-`partitions.csv` is a dummy so IDF builds. Real sizes are `PROJECT_APPS` in `rg_tool.py`. `apply.py` sets:
+`partitions.csv` is a dummy so IDF builds. Real sizes are `PROJECT_APPS` in Retro-Go's `rg_tool.py`. `apply.py` sets:
 
 | App | Slot |
 |---|---|
