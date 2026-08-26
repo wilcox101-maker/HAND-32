@@ -1,9 +1,11 @@
 # HAND-32
 
-ESP32-S3 retro handheld overlay for [ducalex/retro-go](https://github.com/ducalex/retro-go).
+Hardware port of **[Retro-Go](https://github.com/ducalex/retro-go)** — the ESP32 retro firmware by **[ducalex](https://github.com/ducalex)** (Alex Duchesne) and contributors.
 
-**Hardware** (DuPont harness, pin map, power): **[HARDWARE.md](HARDWARE.md)**  
-**Firmware** (apps, partitions, SD layout): **[FIRMWARE.md](FIRMWARE.md)**
+This repo is **not a fork**. It is a target overlay: pins, display init, I2C stick, NS4168 amp. Clone Retro-Go, run `apply.py`, build with Retro-Go's `rg_tool.py`. Launcher, cores, and tooling stay upstream. Full attribution: **[CREDITS.md](CREDITS.md)**.
+
+**Hardware** (DuPont harness, pin map): **[HARDWARE.md](HARDWARE.md)**  
+**Firmware** (apps, partitions, SD): **[FIRMWARE.md](FIRMWARE.md)**
 
 - HiLetgo ESP32-S3-DevKitC **N16R8** (16 MB flash, 8 MB octal PSRAM)
 - Waveshare 2" ST7789T3 320×240 (shared SPI TF, no touch)
@@ -11,11 +13,11 @@ ESP32-S3 retro handheld overlay for [ducalex/retro-go](https://github.com/ducale
 - NullLab NS4168 I2S Class-D amp + 3W speaker
 - NullLab LiPo pack (3.3 V + 5 V headers)
 
-Overlay only. Upstream Retro-Go stays ducalex. **ESP-IDF 5.3.x** (5.3.5 OK). Do not use IDF 6 (`esp_adc_cal` is gone).
+Build with **ESP-IDF 5.3.x** (5.3.5 OK). Do not use IDF 6 (`esp_adc_cal` is gone).
 
 ## Wiring
 
-Four DuPont harnesses — not a rat’s nest. Full schedule in [HARDWARE.md](HARDWARE.md).
+Four DuPont harnesses. Full schedule in [HARDWARE.md](HARDWARE.md).
 
 ![HAND-32 DuPont wiring](wiring.svg)
 
@@ -50,8 +52,12 @@ S3 has no `.fw` packer. Use `install` (or `esptool write_flash 0x0 *.img`). UART
 
 ## After flash
 
-Cores are **in the firmware**. FAT32: `roms/nes`, `roms/gb`, `roms/gbc`, `roms/sms`, `roms/gg`, `roms/md`. Doom IWAD. MSX needs `retro-go/bios/msx/`.
+Cores are **in the firmware** (Retro-Go apps). FAT32: `roms/nes`, `roms/gb`, `roms/gbc`, `roms/sms`, `roms/gg`, `roms/md`. Doom IWAD. MSX needs `retro-go/bios/msx/`.
 
 ## License
 
-Overlay: MIT. Retro-Go cores: upstream licenses. Do not distribute copyrighted ROMs.
+See **[LICENSE](LICENSE)** and **[CREDITS.md](CREDITS.md)**.
+
+- Retro-Go (launcher, cores, `rg_tool.py`): **GPLv2**, © ducalex and contributors. fMSX is non-commercial; handy is zlib.
+- This overlay's original files (target config, docs, wiring, `apply.py`): MIT, when distributed on their own.
+- A flashed HAND-32 image is a modified Retro-Go and follows Retro-Go's licenses. Do not distribute copyrighted ROMs.
