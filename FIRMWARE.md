@@ -83,4 +83,4 @@ retro-go/bios/msx/     MSX.ROM MSX2.ROM …
 
 GB/GBC run without BIOS. MSX does not.
 
-Stick = D-pad. **Start+Select = Menu**.
+**Nulllabs I2C Joystick** = D-pad. **Start+Select = Menu**.
