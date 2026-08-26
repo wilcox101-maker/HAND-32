@@ -14,11 +14,15 @@ MCU is a **YD-ESP32-S3 2022-V1.3** N16R8 (DevKitC-1 clone). Flash on the **UART 
 
 <img src="docs/hardware/esp32-s3-front.jpg" width="420" alt="YD-ESP32-S3 chip side">
 
+**Nulllabs Mini-Joystick** `0x5A`. Header **SCL SDA V G**. Stick 0–255 XY, **PB** (press), **A B C D**. No Start/Select on the module.
+
+<img src="docs/hardware/joystick.jpg" width="560" alt="Nulllabs Mini-Joystick I2C 0x5A">
+
 Start/Select tactiles sit on a 400-point breadboard (or fly leads). Opposite pins of a 4-pin 6×6 mm switch are the two terminals.
 
 <img src="docs/hardware/breadboard.jpg" width="360" alt="400-point breadboard for Start/Select tactiles">
 
-Kit photos (amp + speaker, LiPo pack, Mini-Joystick, tactiles) are the Amazon Nulllabs SKUs: orange NS4168 I2S DAC AMP with 2-wire speaker; LiPo pack 3.3V/5V/VBAT headers; Mini-Joystick header **SCL SDA V G**, buttons A B C D + PB.
+Still needed one-at-a-time: NS4168 amp + speaker, LiPo pack, tactiles.
 
 ## Bill of materials
 
