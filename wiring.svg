@@ -1,68 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 860" role="img" aria-label="HAND-32 DuPont wiring">
-  <rect width="1280" height="860" fill="#0f1410"/>
-  <text x="40" y="34" fill="#d4e8c8" font-family="ui-monospace,Consolas,monospace" font-size="20" font-weight="700">HAND-32  |  DuPont 2.54 mm harness</text>
-  <text x="40" y="54" fill="#7a8f74" font-family="ui-monospace,Consolas,monospace" font-size="12">GPIO = DuPont. Speaker = 2-wire on the amp. Touch NC.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 900" role="img" aria-label="HAND-32 DuPont wiring">
+  <rect width="1280" height="900" fill="#0f1410"/>
+  <text x="40" y="32" fill="#d4e8c8" font-family="ui-monospace,Consolas,monospace" font-size="18" font-weight="700">HAND-32  |  DuPont harness</text>
+  <text x="40" y="50" fill="#7a8f74" font-family="ui-monospace,Consolas,monospace" font-size="12">Joystick has no Start/Select. Two tactiles: GPIO 5 Start, GPIO 6 Select, to GND.</text>
   <g font-family="ui-sans-serif,Segoe UI,sans-serif">
-    <rect x="28" y="78" width="190" height="110" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
-    <text x="123" y="100" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">Nulllabs LiPo pack</text>
-    <text x="44" y="128" fill="#e23b2e" font-size="12">5V</text>
-    <text x="44" y="146" fill="#f0a020" font-size="12">3V3</text>
-    <text x="44" y="164" fill="#c8c8c8" font-size="12">GND</text>
-    <rect x="234" y="78" width="260" height="110" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
-    <text x="364" y="100" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">HiLetgo S3-DevKitC N16R8</text>
-    <text x="250" y="128" fill="#d4c018" font-size="11">12 CLK  11 MOSI  13 MISO</text>
-    <text x="250" y="146" fill="#d0d0d0" font-size="11">10 LCD_CS  4 SD_CS  14 9 21</text>
-    <text x="250" y="164" fill="#3dba5a" font-size="11">17 SDA  18 SCL   41 42 40 I2S</text>
-    <rect x="510" y="78" width="220" height="110" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
-    <text x="620" y="100" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">Waveshare 2in ST7789T3</text>
-    <text x="526" y="128" fill="#f0a020" font-size="11">3V3 (VCC = NC)</text>
-    <text x="526" y="146" fill="#d4c018" font-size="11">SCLK MOSI MISO CS DC RST BL</text>
-    <text x="526" y="164" fill="#6a4a4a" font-size="11">TP_* = no connect</text>
-    <rect x="746" y="78" width="210" height="110" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
-    <text x="851" y="100" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">Nulllabs I2C Joystick</text>
-    <text x="851" y="118" text-anchor="middle" fill="#7a8f74" font-size="11">0x5A</text>
-    <text x="762" y="146" fill="#f0a020" font-size="11">VCC 3.3 V</text>
-    <text x="762" y="164" fill="#3dba5a" font-size="11">SDA  SCL  GND</text>
+    <rect x="28" y="66" width="200" height="100" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
+    <text x="128" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">Nulllabs LiPo pack</text>
+    <text x="44" y="118" fill="#e23b2e" font-size="12">5V</text>
+    <text x="44" y="136" fill="#f0a020" font-size="12">3V3</text>
+    <text x="44" y="154" fill="#c8c8c8" font-size="12">GND</text>
+    <rect x="244" y="66" width="250" height="100" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
+    <text x="369" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">HiLetgo S3 N16R8</text>
+    <text x="260" y="118" fill="#d4c018" font-size="11">12 11 13 SPI   10 4 CS</text>
+    <text x="260" y="136" fill="#3dba5a" font-size="11">17/18 I2C   41 42 40 I2S</text>
+    <text x="260" y="154" fill="#d0d0d0" font-size="11">5 START   6 SELECT</text>
+    <rect x="510" y="66" width="220" height="100" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
+    <text x="620" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">Waveshare 2in</text>
+    <text x="526" y="118" fill="#f0a020" font-size="11">3V3 (VCC=NC)</text>
+    <text x="526" y="136" fill="#d4c018" font-size="11">SCLK MOSI MISO CS DC RST BL</text>
+    <text x="526" y="154" fill="#6a4a4a" font-size="11">TP_* NC</text>
+    <rect x="746" y="66" width="230" height="100" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
+    <text x="861" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">Nulllabs I2C Joystick</text>
+    <text x="861" y="108" text-anchor="middle" fill="#7a8f74" font-size="11">0x5A  XY PB A B C D</text>
+    <text x="762" y="136" fill="#3dba5a" font-size="11">SDA SCL  VCC 3.3  GND</text>
+    <text x="762" y="154" fill="#7a8f74" font-size="11">no Start/Select on module</text>
+    <rect x="992" y="66" width="256" height="100" rx="10" fill="#1e2a1c" stroke="#d0d0d0" stroke-width="2"/>
+    <text x="1120" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">2x tactile</text>
+    <text x="1008" y="118" fill="#d0d0d0" font-size="11">GPIO 5 -- Start -- GND</text>
+    <text x="1008" y="136" fill="#d0d0d0" font-size="11">GPIO 6 -- Select -- GND</text>
+    <text x="1008" y="154" fill="#7a8f74" font-size="11">active-low, internal pull-up</text>
   </g>
   <g font-family="ui-sans-serif,Segoe UI,sans-serif">
-    <rect x="28" y="206" width="1224" height="168" rx="12" fill="#1a2218" stroke="#e07a32" stroke-width="2"/>
-    <text x="44" y="230" fill="#e07a32" font-size="15" font-weight="700">Nulllabs NS4168 3W Audio amp w/Speaker</text>
-    <text x="44" y="248" fill="#7a8f74" font-size="11">Silkscreen: NS4168 I2S DAC AMP. I2S plug = G V BCL LRC DIN. Speaker is 2-wire on + / - . No CTRL on this cable.</text>
-    <rect x="48" y="262" width="220" height="94" rx="10" fill="#d96a28"/>
-    <rect x="60" y="274" width="196" height="70" rx="6" fill="#1c2834"/>
-    <text x="158" y="294" text-anchor="middle" fill="#e8d8b0" font-size="11" font-weight="700">NS4168 I2S DAC AMP</text>
-    <text x="72" y="314" fill="#8ab4e8" font-size="10">Power G V     I2S G V BCL LRC DIN</text>
-    <text x="72" y="332" fill="#e23b2e" font-size="10">+ / - speaker terminals</text>
-    <line x1="276" y1="292" x2="400" y2="292" stroke="#e23b2e" stroke-width="4"/>
-    <line x1="276" y1="312" x2="400" y2="312" stroke="#c8c8c8" stroke-width="4"/>
-    <text x="288" y="284" fill="#e23b2e" font-size="11">red +</text>
-    <text x="288" y="330" fill="#c8c8c8" font-size="11">black -</text>
-    <rect x="400" y="262" width="96" height="94" rx="8" fill="#1a1a1a" stroke="#888"/>
-    <circle cx="448" cy="309" r="28" fill="#3a3a3a" stroke="#888"/>
-    <circle cx="448" cy="309" r="16" fill="#c8c8c8"/>
-    <circle cx="448" cy="309" r="6" fill="#eee"/>
-    <rect x="400" y="292" width="8" height="16" rx="2" fill="#888"/>
-    <rect x="488" y="292" width="8" height="16" rx="2" fill="#888"/>
-    <text x="520" y="292" fill="#c6e6a8" font-size="13" font-weight="700">3 W speaker</text>
-    <text x="520" y="312" fill="#7a8f74" font-size="11">Amp + to speaker +. Amp - to speaker -.</text>
-    <text x="520" y="330" fill="#7a8f74" font-size="11">Do not land the speaker on the DevKit.</text>
+    <rect x="28" y="184" width="1224" height="150" rx="12" fill="#1a2218" stroke="#e07a32" stroke-width="2"/>
+    <text x="44" y="208" fill="#e07a32" font-size="14" font-weight="700">Nulllabs NS4168 3W Audio amp w/Speaker</text>
+    <rect x="48" y="220" width="200" height="94" rx="10" fill="#d96a28"/>
+    <rect x="58" y="232" width="180" height="70" rx="6" fill="#1c2834"/>
+    <text x="148" y="258" text-anchor="middle" fill="#e8d8b0" font-size="11" font-weight="700">NS4168 I2S DAC AMP</text>
+    <text x="70" y="278" fill="#8ab4e8" font-size="10">G V BCL LRC DIN</text>
+    <text x="70" y="292" fill="#e23b2e" font-size="10">+ / - speaker</text>
+    <line x1="256" y1="250" x2="380" y2="250" stroke="#e23b2e" stroke-width="4"/>
+    <line x1="256" y1="268" x2="380" y2="268" stroke="#c8c8c8" stroke-width="4"/>
+    <text x="268" y="242" fill="#e23b2e" font-size="11">red +</text>
+    <text x="268" y="286" fill="#c8c8c8" font-size="11">black -</text>
+    <rect x="380" y="220" width="90" height="94" rx="8" fill="#1a1a1a" stroke="#888"/>
+    <circle cx="425" cy="267" r="26" fill="#3a3a3a" stroke="#888"/>
+    <circle cx="425" cy="267" r="14" fill="#c8c8c8"/>
+    <circle cx="425" cy="267" r="5" fill="#eee"/>
+    <text x="490" y="258" fill="#c6e6a8" font-size="13" font-weight="700">3 W speaker</text>
+    <text x="490" y="278" fill="#7a8f74" font-size="11">2-wire on the amp. Not a GPIO.</text>
+    <text x="490" y="296" fill="#7a8f74" font-size="11">41 BCL  42 LRC  40 DIN</text>
   </g>
   <g font-family="ui-monospace,Consolas,monospace" font-size="13">
-    <text x="40" y="406" fill="#9db88e" font-weight="700">1 POWER</text>
-    <rect x="40" y="414" width="1200" height="48" rx="8" fill="#161c14" stroke="#2c3a28"/>
-    <text x="56" y="444" fill="#e8d0cc">Red pack 5V - DevKit 5V and amp Power V.  Orange pack 3V3 - LCD 3V3 and Nulllabs I2C Joystick VCC.  Black star GND.</text>
-    <text x="40" y="492" fill="#9db88e" font-weight="700">2 SPI2</text>
-    <rect x="40" y="500" width="1200" height="40" rx="8" fill="#161c14" stroke="#2c3a28"/>
-    <text x="56" y="526" fill="#d4c018">12 SCLK   11 MOSI   13 MISO   10 LCD_CS   4 SD_CS   14 DC   9 RST   21 BL</text>
-    <text x="40" y="570" fill="#9db88e" font-weight="700">3 I2C Nulllabs I2C Joystick          4 I2S amp (BCL LRC DIN)</text>
-    <rect x="40" y="578" width="580" height="40" rx="8" fill="#161c14" stroke="#2c3a28"/>
-    <text x="56" y="604" fill="#3dba5a">17 SDA     18 SCL     0x5A</text>
-    <rect x="640" y="578" width="600" height="40" rx="8" fill="#161c14" stroke="#2c3a28"/>
-    <text x="656" y="604" fill="#3a7bd4">41 BCL     42 LRC     40 DIN     G to GND</text>
-    <text x="40" y="650" fill="#9db88e" font-weight="700">5 SPEAKER 2-wire</text>
-    <rect x="40" y="658" width="1200" height="40" rx="8" fill="#161c14" stroke="#2c3a28"/>
-    <text x="56" y="684" fill="#e8d0cc">Red  amp + to speaker +      Black  amp - to speaker -      GPIO 8 unused (no CTRL on this I2S cable)</text>
+    <text x="40" y="364" fill="#9db88e" font-weight="700">1 POWER     2 SPI2     3 I2C     4 I2S     5 SPEAKER     6 TACTILES</text>
+    <rect x="40" y="376" width="1200" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
+    <text x="56" y="400" fill="#e8d0cc">Pack 5V - DevKit 5V + amp V.  Pack 3V3 - LCD 3V3 + joystick VCC.  Star GND.</text>
+    <rect x="40" y="422" width="1200" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
+    <text x="56" y="446" fill="#d4c018">12 SCLK  11 MOSI  13 MISO  10 LCD_CS  4 SD_CS  14 DC  9 RST  21 BL</text>
+    <rect x="40" y="468" width="580" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
+    <text x="56" y="492" fill="#3dba5a">17 SDA  18 SCL  0x5A  A/B/C/D/PB</text>
+    <rect x="640" y="468" width="600" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
+    <text x="656" y="492" fill="#3a7bd4">41 BCL  42 LRC  40 DIN</text>
+    <rect x="40" y="514" width="580" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
+    <text x="56" y="538" fill="#e8d0cc">Amp + red / - black to speaker</text>
+    <rect x="640" y="514" width="600" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
+    <text x="656" y="538" fill="#d0d0d0">GPIO 5 Start  GPIO 6 Select  both to GND</text>
   </g>
-  <text x="40" y="728" fill="#7a8f74" font-family="ui-monospace,Consolas,monospace" font-size="12">Never: 0 3 19 20 26-37 43-46 48. Unplug pack 5V from DevKit while UART USB-C supplies 5V. Amp VCC 3.0-5.5 V, use pack 5V for 3 W.</text>
-  <text x="40" y="752" fill="#4a5c46" font-family="ui-monospace,Consolas,monospace" font-size="11">hiletgo-ws2-ns4168  |  Retro-Go by ducalex  |  wilcox101-maker/HAND-32</text>
+  <text x="40" y="580" fill="#7a8f74" font-family="ui-monospace,Consolas,monospace" font-size="12">Never: 0 3 8 (no CTRL) 19 20 26-37 43-46 48. Unplug pack 5V while UART USB-C is plugged in.</text>
+  <text x="40" y="604" fill="#4a5c46" font-family="ui-monospace,Consolas,monospace" font-size="11">hiletgo-ws2-ns4168  |  Retro-Go by ducalex  |  wilcox101-maker/HAND-32</text>
 </svg>
