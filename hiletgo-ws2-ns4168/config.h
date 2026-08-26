@@ -3,8 +3,8 @@
  * Retro-Go (c) Alex Duchesne (@ducalex) and contributors, GPLv2.
  * https://github.com/ducalex/retro-go
  *
- * Hardware: HiLetgo ESP32-S3-DevKitC N16R8, Waveshare 2" ST7789T3
- * (shared SPI TF), NullLab I2C stick 0x5A, NS4168.
+ * Nulllabs I2C Joystick 0x5A: analog XY, PB, A, B, C, D (no Start/Select).
+ * START/SELECT are two active-low tactiles on GPIO 5 / 6.
  */
 #pragma once
 
@@ -75,8 +75,15 @@
 
 #define RG_BATTERY_DRIVER           0
 
+/* Keeps rg_input.c I2C path compiled; analog XY + A/B/C/D/PB decoded in the HILETGO block. */
 #define RG_GAMEPAD_I2C_MAP { \
     {RG_KEY_A, .num = 31, .level = 1}, \
+}
+
+/* Nulllabs joystick has no Start/Select. Two tactiles, active-low to GND, internal pull-up. */
+#define RG_GAMEPAD_GPIO_MAP { \
+    {RG_KEY_START,  .num = GPIO_NUM_5, .pullup = 1, .level = 0}, \
+    {RG_KEY_SELECT, .num = GPIO_NUM_6, .pullup = 1, .level = 0}, \
 }
 
 #define RG_NULLLAB_JOY_ADDR         0x5A
