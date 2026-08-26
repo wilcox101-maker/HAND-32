@@ -2,7 +2,7 @@
 
 ESP32-S3 retro handheld overlay for [ducalex/retro-go](https://github.com/ducalex/retro-go).
 
-**Hardware**
+**Hardware** — full pin map, power, and wiring: **[HARDWARE.md](HARDWARE.md)**
 
 - HiLetgo ESP32-S3-DevKitC **N16R8**
 - Waveshare 2" ST7789T3 320×240 (shared SPI TF, no touch)
@@ -11,6 +11,19 @@ ESP32-S3 retro handheld overlay for [ducalex/retro-go](https://github.com/ducale
 - NullLab LiPo pack (3.3 V + 5 V headers)
 
 This repo is the **target overlay only**. Retro-Go itself stays upstream. Build with **ESP-IDF 5.3.x** (5.3.5 is fine). Do not use IDF 6.
+
+## Wiring
+
+```mermaid
+flowchart LR
+  PACK["LiPo pack"] -->|5V| MCU["HiLetgo S3 N16R8"]
+  PACK -->|5V| AMP["NS4168"]
+  PACK -->|3.3V| LCD["Waveshare ST7789T3 + TF"]
+  PACK -->|3.3V| JOY["Stick 0x5A"]
+  MCU -->|"SPI2 12/11/13 CS10 DC14 RST9 BL21 SD4"| LCD
+  MCU -->|"I2C 17/18"| JOY
+  MCU -->|"I2S 41/42/40 CTRL8"| AMP
+```
 
 ## Pin map
 
