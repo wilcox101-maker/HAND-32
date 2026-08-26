@@ -8,6 +8,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 MARKER = "RG_TARGET_HILETGO_WS2_NS4168"
+APPS = "launcher retro-core prboom-go gwenesis fmsx"
 
 INPUT_SNIPPET = r'''
 #if defined(RG_GAMEPAD_I2C_MAP)
@@ -49,6 +50,25 @@ CONFIG_ELIF = '''#elif defined(RG_TARGET_HILETGO_WS2_NS4168)
 #elif defined(RG_TARGET_REDROID_GO)
 '''
 
+# 64K-aligned slots; upstream overflowed launcher/prboom/fmsx on this tree.
+PROJECT_APPS_OLD = """PROJECT_APPS = {
+    # Project name  Type, SubType, Size
+    'launcher':     [0, 16, 1048576],
+    'retro-core':   [0, 16, 1048576],
+    'prboom-go':    [0, 16, 786432],
+    'gwenesis':     [0, 16, 1048576],
+    'fmsx':         [0, 16, 589824],
+}"""
+
+PROJECT_APPS_NEW = """PROJECT_APPS = {
+    # Project name  Type, SubType, Size  (HAND-32 16MB, 64K aligned)
+    'launcher':     [0, 16, 1179648],
+    'retro-core':   [0, 16, 1179648],
+    'prboom-go':    [0, 16, 917504],
+    'gwenesis':     [0, 16, 1179648],
+    'fmsx':         [0, 16, 786432],
+}"""
+
 
 def die(msg: str) -> None:
     print(f"error: {msg}", file=sys.stderr)
@@ -86,8 +106,19 @@ def apply(root: Path) -> None:
         src = src.replace(close, close_new, 1)
         inp.write_text(src, encoding="utf-8")
 
+    tool = root / "rg_tool.py"
+    rt = tool.read_text(encoding="utf-8")
+    if "1179648" not in rt and PROJECT_APPS_OLD in rt:
+        tool.write_text(rt.replace(PROJECT_APPS_OLD, PROJECT_APPS_NEW, 1), encoding="utf-8")
+        print("patched rg_tool.py PROJECT_APPS (16MB HAND-32 slots)")
+    elif "1179648" in rt:
+        print("rg_tool.py PROJECT_APPS already bumped")
+    else:
+        print("note: rg_tool.py PROJECT_APPS layout unexpected; mkfw will grow slots")
+
     print(f"ok: target hiletgo-ws2-ns4168 installed in {root}")
-    print("  python rg_tool.py build-img launcher retro-core --target hiletgo-ws2-ns4168")
+    print("  python rg_tool.py build-fw " + APPS + " --target hiletgo-ws2-ns4168")
+    print("  python rg_tool.py build-img " + APPS + " --target hiletgo-ws2-ns4168")
     print("  python rg_tool.py install --target hiletgo-ws2-ns4168")
 
 
