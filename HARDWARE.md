@@ -1,6 +1,8 @@
 # HAND-32 hardware
 
-Target `hiletgo-ws2-ns4168`. All jumpers are **2.54 mm DuPont** (female–female onto module headers, female–male onto the DevKit). One color per net. Touch header **NC**.
+Target `hiletgo-ws2-ns4168` for **[Retro-Go](https://github.com/ducalex/retro-go)** by [ducalex](https://github.com/ducalex) (Alex Duchesne) and contributors. This overlay is a **port, not a fork**. See [CREDITS.md](CREDITS.md).
+
+All jumpers are **2.54 mm DuPont** (female–female onto module headers, female–male onto the DevKit). One color per net. Touch header **NC**.
 
 ![HAND-32 DuPont wiring](wiring.svg)
 
