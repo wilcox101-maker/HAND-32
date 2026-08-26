@@ -28,7 +28,7 @@ Start/Select: two **6×6 mm 4-pin tactiles** on a 400-point breadboard (or fly l
 
 <img src="docs/hardware/breadboard.jpg" width="360" alt="400-point breadboard for Start/Select tactiles">
 
-Still needed: **NS4168 amp + speaker** (one photo).
+**Nulllabs NS4168 3W Audio amp w/Speaker** is in the wiring diagram (orange I2S DAC AMP) and harnesses 4–5: **G V BCL LRC DIN**, speaker +/− 2-wire.
 
 ## Bill of materials
 
