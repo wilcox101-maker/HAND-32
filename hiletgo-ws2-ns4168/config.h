@@ -1,5 +1,11 @@
-// HAND-32 / HiLetgo ESP32-S3-DevKitC N16R8
-// Waveshare 2" ST7789T3 (shared SPI TF) + NullLab I2C stick 0x5A + NS4168
+/* HAND-32 target overlay for Retro-Go (ducalex/retro-go).
+ * Not a fork. Pins and panel init only.
+ * Retro-Go (c) Alex Duchesne (@ducalex) and contributors, GPLv2.
+ * https://github.com/ducalex/retro-go
+ *
+ * Hardware: HiLetgo ESP32-S3-DevKitC N16R8, Waveshare 2" ST7789T3
+ * (shared SPI TF), NullLab I2C stick 0x5A, NS4168.
+ */
 #pragma once
 
 #define RG_TARGET_NAME             "HILETGO-WS2-NS4168"
