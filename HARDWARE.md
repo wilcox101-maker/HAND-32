@@ -1,168 +1,106 @@
 # HAND-32 hardware
 
-Locked pin map for HiLetgo ESP32-S3-DevKitC N16R8 + Waveshare 2" ST7789T3 + NullLab I2C stick + NS4168. Firmware target: `hiletgo-ws2-ns4168` (`config.h`). Touch unused. Battery ADC unused.
+Target `hiletgo-ws2-ns4168`. All jumpers are **2.54 mm DuPont** (female–female onto module headers, female–male onto the DevKit). One color per net. Touch header **NC**.
+
+![HAND-32 DuPont wiring](wiring.svg)
 
 ## Bill of materials
 
-| Qty | Part | Role |
+| Qty | Part | Notes |
 |---|---|---|
-| 1 | HiLetgo ESP32-S3-DevKitC **N16R8** | MCU, 16 MB flash, 8 MB octal PSRAM, 240 MHz |
-| 1 | Waveshare **2 inch** LCD, 320×240 **ST7789T3**, TF slot | Panel + ROM storage. Capacitive touch left unconnected |
-| 1 | NullLab I2C joystick **0x5A** | Analog XY + face buttons |
-| 1 | NullLab NS4168 kit (Class D, I2S) + 3 W speaker | Audio |
-| 1 | NullLab LiPo pack, **3.3 V and 5 V** headers | Field power |
+| 1 | HiLetgo ESP32-S3-DevKitC **N16R8** | 16 MB flash, 8 MB octal PSRAM, 240 MHz. Flash on **UART USB-C** |
+| 1 | Waveshare **2 inch** ST7789T3 320×240 + TF | Header names below. Power the **3V3** pin; leave module **VCC** open (Waveshare wiki) |
+| 1 | NullLab I2C joystick **0x5A** | VCC / GND / SDA / SCL |
+| 1 | NullLab NS4168 + 3 W speaker | VCC 3.0–5.5 V. Use pack **5 V** for 3 W |
+| 1 | NullLab LiPo pack | 3.3 V and 5 V headers |
+| — | DuPont FF / FM 20 cm | Colors in the schedule |
 
-## Wiring diagram
+## DuPont colors
 
-```mermaid
-flowchart TB
-  subgraph pack ["NullLab LiPo pack"]
-    P5["5 V"]
-    P3["3.3 V"]
-    PG[GND]
-  end
+Hobby / Adafruit / Qwiic convention:
 
-  subgraph mcu ["HiLetgo ESP32-S3-DevKitC N16R8"]
-    V5["5V pin"]
-    G[GND]
-    SPI["SPI2  CLK12 MOSI11 MISO13"]
-    I2C["I2C  SDA17 SCL18"]
-    I2S["I2S  BCLK41 WS42 DOUT40"]
-    CTRL["GPIO8 CTRL"]
-    CS10["GPIO10 LCD_CS"]
-    CS4["GPIO4 SD_CS"]
-    DC["GPIO14 DC"]
-    RST["GPIO9 RST"]
-    BL["GPIO21 BL"]
-  end
+| Color | Net |
+|---|---|
+| Red | +5 V |
+| Orange | +3.3 V |
+| Black | GND |
+| Yellow | clocks (SCLK, SCL, WS) |
+| Green | data out (MOSI, SDA, DIN) |
+| Blue | data in / bit clock (MISO, BCLK) |
+| White | chip-select / CTRL |
+| Violet | LCD DC / RST / BL |
 
-  subgraph lcd ["Waveshare 2in ST7789T3 + TF"]
-    L5["VCC 3.3 V"]
-    LSCLK[SCLK]
-    LMOSI[MOSI]
-    LMISO[MISO]
-    LCS[LCD_CS]
-    LDC[DC]
-    LRST[RST]
-    LBL[BL]
-    SDCS[SD_CS]
-  end
+## Harness 1 — power (star GND)
 
-  subgraph joy ["NullLab stick 0x5A"]
-    J3["VCC 3.3 V"]
-    JSDA[SDA]
-    JSCL[SCL]
-  end
+| Color | From | To |
+|---|---|---|
+| Red | Pack **5V** | DevKit **5V** |
+| Red | Pack **5V** | NS4168 **VCC** |
+| Orange | Pack **3V3** | LCD **3V3** (not VCC) |
+| Orange | Pack **3V3** | Stick **VCC** |
+| Black | Pack **GND** | DevKit GND, LCD GND, stick GND, NS4168 GND |
 
-  subgraph amp ["NS4168 + 3W"]
-    A5["VIN 5 V"]
-    ABCK[BCLK]
-    AWS[LRCLK]
-    ADIN[DIN]
-    ACTRL[CTRL HIGH = ON]
-  end
+Unplug pack 5 V from the DevKit whenever UART USB-C is supplying 5 V (do not parallel two 5 V sources).
 
-  P5 --> V5
-  P5 --> A5
-  P3 --> L5
-  P3 --> J3
-  PG --> G
+## Harness 2 — SPI2 (shared LCD + TF)
 
-  SPI --> LSCLK
-  SPI --> LMOSI
-  SPI --> LMISO
-  CS10 --> LCS
-  CS4 --> SDCS
-  DC --> LDC
-  RST --> LRST
-  BL --> LBL
+Same CLK / MOSI / MISO. **Two chip-selects.**
 
-  I2C --> JSDA
-  I2C --> JSCL
+| Color | DevKit GPIO | Waveshare pin |
+|---|---|---|
+| Yellow | **12** | SCLK |
+| Green | **11** | MOSI |
+| Blue | **13** | MISO (required for SD) |
+| White | **10** | LCD_CS |
+| White | **4** | SD_CS |
+| Violet | **14** | LCD_DC |
+| Violet | **9** | LCD_RST |
+| Violet | **21** | LCD_BL (active high) |
 
-  I2S --> ABCK
-  I2S --> AWS
-  I2S --> ADIN
-  CTRL --> ACTRL
-```
+SPI host `SPI2_HOST`. LCD 40 MHz. SD probing speed. Do **not** use Waveshare’s ESP32-S3 example GPIOs (1/2/38/39/40/41/42) — those collide with this I2S map.
 
-ASCII (same netlist):
+## Harness 3 — I2C stick (Qwiic colors)
 
-```
-NullLab pack 5V  ----+---- DevKit 5V
-                     +---- NS4168 VIN
-NullLab pack 3.3V ---+---- Waveshare VCC
-                     +---- Stick VCC
-NullLab pack GND  -------- DevKit / LCD / stick / amp GND   (common)
+| Color | DevKit GPIO | Stick |
+|---|---|---|
+| Green | **17** | SDA |
+| Yellow | **18** | SCL |
 
-DevKit GPIO12  -------- Waveshare SCLK     (LCD + TF clock)
-DevKit GPIO11  -------- Waveshare MOSI
-DevKit GPIO13  -------- Waveshare MISO     (required for SD)
-DevKit GPIO10  -------- Waveshare LCD_CS
-DevKit GPIO4   -------- Waveshare SD_CS    (must be a different CS)
-DevKit GPIO14  -------- Waveshare DC
-DevKit GPIO9   -------- Waveshare RST
-DevKit GPIO21  -------- Waveshare BL       (active high)
+100 kHz, address `0x5A`. Leave **TP_SDA / TP_SCL / TP_INT / TP_RST** unconnected. If you ever attach touch: CST816D is not `0x5A`, but **TP_INT on GPIO 4 fights SD_CS** and **TP_RST on GPIO 9 fights LCD_RST**.
 
-DevKit GPIO17  -------- Stick SDA          (I2C 0x5A, 100 kHz)
-DevKit GPIO18  -------- Stick SCL
+## Harness 4 — I2S amp
 
-DevKit GPIO41  -------- NS4168 BCLK
-DevKit GPIO42  -------- NS4168 LRCLK / WS
-DevKit GPIO40  -------- NS4168 DIN
-DevKit GPIO8   -------- NS4168 CTRL        (drive HIGH = amp ON, right mix)
-```
+| Color | DevKit GPIO | NS4168 |
+|---|---|---|
+| Blue | **41** | BCLK |
+| Yellow | **42** | LRCLK / WS |
+| Green | **40** | DIN |
+| White | **8** | CTRL |
 
-Waveshare **touch** pins: no connect. DevKit **UART USB-C** is the flash/monitor port. Unplug pack 5 V from the DevKit whenever that USB cable is supplying 5 V.
+CTRL is **channel select**. Firmware holds GPIO 8 **HIGH** (right). Speaker on SPK+ / SPK− only — no DuPont there.
 
-## Pin map
+## Pin map vs forbidden
 
-| Function | GPIO | Destination | Notes |
-|---|---|---|---|
-| SPI CLK | 12 | Waveshare SCLK | Shared LCD + TF |
-| SPI MOSI | 11 | MOSI | Shared LCD + TF |
-| SPI MISO | 13 | MISO | Required for SD |
-| LCD CS | 10 | LCD_CS | SPI2_HOST |
-| SD CS | 4 | SD_CS | Distinct chip-select |
-| LCD DC | 14 | LCD_DC | |
-| LCD RST | 9 | LCD_RST | |
-| LCD BL | 21 | LCD_BL | Active high |
-| I2C SDA | 17 | Stick SDA | NullLab 0x5A |
-| I2C SCL | 18 | Stick SCL | 100 kHz |
-| I2S BCLK | 41 | NS4168 BCLK | Do not use 32/33 |
-| I2S WS | 42 | NS4168 LRCLK | Philips I2S |
-| I2S DOUT | 40 | NS4168 DIN | |
-| Amp CTRL | 8 | NS4168 CTRL | HIGH = right + ON |
+Used: **4, 8, 9, 10, 11, 12, 13, 14, 17, 18, 21, 40, 41, 42**. No duplicates. Shared SPI is two CS, not a short.
 
-SPI host: **SPI2**. LCD clock: **40 MHz**. SD: `SDMMC_FREQ_PROBING`. Panel: 320×240, MADCTL `MV | BGR`, inversion `0x21`.
-
-## Do not wire
-
-| GPIO | Why |
+| GPIO | Why unused |
 |---|---|
 | 19, 20 | USB D+/D− |
-| 26–32 | Internal flash on WROOM-1 |
-| 33, 34 | Not broken out on this DevKit |
-| 35, 36, 37 | Octal PSRAM — never touch |
+| 26–32 | WROOM-1 flash |
+| 33, 34 | Not broken out |
+| 35, 36, 37 | Octal PSRAM |
 | 0, 3, 45, 46 | Strapping |
 | 43, 44 | UART0 console |
-| 48 | Onboard RGB LED |
+| 48 | Onboard RGB |
 
-## Power
+GPIO 17/18 are S3 default UART1 — Retro-Go console is UART0. Fine unless you enable UART1 on the defaults.
 
-| Rail | Goes to |
+## Electrical
+
+| Rail | Destinations |
 |---|---|
-| Pack **5 V** | DevKit `5V` + NS4168 VIN |
-| Pack **3.3 V** | LCD VCC + joystick VCC |
-| GND | All boards, one star |
+| 5 V | DevKit `5V`, NS4168 `VCC` |
+| 3.3 V | LCD `3V3`, stick `VCC` |
+| GND | All four boards, one star |
 
-NS4168 VIN is **5 V**, not 3.3 V. `RG_BATTERY_DRIVER` is 0 — no cell ADC yet.
-
-## Input / audio protocol
-
-- Stick: I2C read 6 bytes at `0x5A`. XY center 128, deadzone 40 → D-pad. Face bytes → A/B/Start/Select. **Start+Select = Menu**.
-- Amp: I2S Philips, mono, CTRL held high.
-
-## Storage
-
-FAT32 microSD in the Waveshare TF slot. Folders: `roms/nes`, `roms/gb`, `roms/gbc`, `roms/sms`.
+`RG_BATTERY_DRIVER` is 0 — no cell ADC. Stick XY center 128, deadzone 40. Start+Select = Menu.
