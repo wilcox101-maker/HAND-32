@@ -5,8 +5,8 @@ Not a fork. Retro-Go stays upstream:
   https://github.com/ducalex/retro-go
   (c) Alex Duchesne (@ducalex) and contributors, GPLv2
 
-This copies a hardware target and patches rg_input.c / config.h in that
-clone. Combined firmware follows Retro-Go's licenses.
+Nulllabs I2C Joystick has XY, PB, A, B, C, D — no Start/Select.
+Those two keys are GPIO 5 / 6 tactiles (config.h RG_GAMEPAD_GPIO_MAP).
 """
 from __future__ import annotations
 
@@ -30,23 +30,22 @@ INPUT_SNIPPET = r'''
             if (d[0] > 128 + dead) state |= RG_KEY_RIGHT;
             if (d[1] < 128 - dead) state |= RG_KEY_UP;
             if (d[1] > 128 + dead) state |= RG_KEY_DOWN;
+            /* Nulllabs: A B C D PB. Start/Select are GPIO tactiles, not I2C. */
             if (d[2] > 1 || d[3] > 1)
             {
                 if (d[2] & 1)  state |= RG_KEY_A;
                 if (d[2] & 2)  state |= RG_KEY_B;
-                if (d[2] & 4)  state |= RG_KEY_START;
-                if (d[2] & 8)  state |= RG_KEY_SELECT;
-                if (d[2] & 16) state |= RG_KEY_MENU;
+                if (d[2] & 4)  state |= RG_KEY_X;     /* C */
+                if (d[2] & 8)  state |= RG_KEY_Y;     /* D */
+                if (d[2] & 16) state |= RG_KEY_MENU;  /* PB */
             }
             else
             {
                 if (d[2]) state |= RG_KEY_A;
                 if (d[3]) state |= RG_KEY_B;
-                if (d[4]) state |= RG_KEY_START;
-                if (d[5]) state |= RG_KEY_SELECT;
+                if (d[4]) state |= RG_KEY_X;
+                if (d[5]) state |= RG_KEY_Y;
             }
-            if ((state & (RG_KEY_START | RG_KEY_SELECT)) == (RG_KEY_START | RG_KEY_SELECT))
-                state |= RG_KEY_MENU;
         }
     }
 #else
@@ -58,7 +57,6 @@ CONFIG_ELIF = '''#elif defined(RG_TARGET_HILETGO_WS2_NS4168)
 #elif defined(RG_TARGET_REDROID_GO)
 '''
 
-# 64K-aligned slots; upstream overflowed launcher/prboom/fmsx on this tree.
 PROJECT_APPS_OLD = """PROJECT_APPS = {
     # Project name  Type, SubType, Size
     'launcher':     [0, 16, 1048576],
@@ -113,6 +111,27 @@ def apply(root: Path) -> None:
             die("rg_input.c: could not close HILETGO I2C branch")
         src = src.replace(close, close_new, 1)
         inp.write_text(src, encoding="utf-8")
+    else:
+        # Refresh button map on an already-patched tree (no Start/Select on I2C).
+        old_bits = (
+            "                if (d[2] & 4)  state |= RG_KEY_START;\n"
+            "                if (d[2] & 8)  state |= RG_KEY_SELECT;\n"
+            "                if (d[2] & 16) state |= RG_KEY_MENU;"
+        )
+        new_bits = (
+            "                if (d[2] & 4)  state |= RG_KEY_X;     /* C */\n"
+            "                if (d[2] & 8)  state |= RG_KEY_Y;     /* D */\n"
+            "                if (d[2] & 16) state |= RG_KEY_MENU;  /* PB */"
+        )
+        if old_bits in src:
+            src = src.replace(old_bits, new_bits, 1)
+            src = src.replace(
+                "                if (d[4]) state |= RG_KEY_START;\n                if (d[5]) state |= RG_KEY_SELECT;",
+                "                if (d[4]) state |= RG_KEY_X;\n                if (d[5]) state |= RG_KEY_Y;",
+                1,
+            )
+            inp.write_text(src, encoding="utf-8")
+            print("updated I2C map: A/B/C/D/PB; Start/Select are GPIO 5/6")
 
     tool = root / "rg_tool.py"
     rt = tool.read_text(encoding="utf-8")
