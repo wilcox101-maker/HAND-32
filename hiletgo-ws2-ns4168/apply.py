@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-"""Overlay HAND-32 target onto a cloned ducalex/retro-go tree."""
+"""Overlay HAND-32 onto a cloned ducalex/retro-go tree.
+
+Not a fork. Retro-Go stays upstream:
+  https://github.com/ducalex/retro-go
+  (c) Alex Duchesne (@ducalex) and contributors, GPLv2
+
+This copies a hardware target and patches rg_input.c / config.h in that
+clone. Combined firmware follows Retro-Go's licenses.
+"""
 from __future__ import annotations
 
 import shutil
@@ -117,6 +125,7 @@ def apply(root: Path) -> None:
         print("note: rg_tool.py PROJECT_APPS layout unexpected; mkfw will grow slots")
 
     print(f"ok: target hiletgo-ws2-ns4168 installed in {root}")
+    print("firmware: Retro-Go by ducalex  https://github.com/ducalex/retro-go")
     print("  python rg_tool.py build-fw " + APPS + " --target hiletgo-ws2-ns4168")
     print("  python rg_tool.py build-img " + APPS + " --target hiletgo-ws2-ns4168")
     print("  python rg_tool.py install --target hiletgo-ws2-ns4168")
