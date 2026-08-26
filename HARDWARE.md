@@ -2,20 +2,35 @@
 
 Target `hiletgo-ws2-ns4168` for **[Retro-Go](https://github.com/ducalex/retro-go)** by [ducalex](https://github.com/ducalex) (Alex Duchesne) and contributors. Port overlay, not a fork. [CREDITS.md](CREDITS.md).
 
-GPIO nets use **2.54 mm DuPont**. Speaker is a **2-wire** pair on the amp. Touch **NC**.
+GPIO nets: **2.54 mm DuPont**. Speaker: **2-wire** on the amp. Touch **NC**.
 
 ![HAND-32 DuPont wiring](wiring.svg)
+
+## Photos
+
+MCU is a **YD-ESP32-S3 2022-V1.3** N16R8 (DevKitC-1 clone). Flash on the **UART USB-C** (back silkscreen **USB / COM**), not **USB-OTG**.
+
+<img src="docs/hardware/esp32-s3.jpg" width="560" alt="YD-ESP32-S3 N16R8 both sides">
+
+<img src="docs/hardware/esp32-s3-front.jpg" width="420" alt="YD-ESP32-S3 chip side">
+
+Start/Select tactiles sit on a 400-point breadboard (or fly leads). Opposite pins of a 4-pin 6×6 mm switch are the two terminals.
+
+<img src="docs/hardware/breadboard.jpg" width="360" alt="400-point breadboard for Start/Select tactiles">
+
+Kit photos (amp + speaker, LiPo pack, Mini-Joystick, tactiles) are the Amazon Nulllabs SKUs: orange NS4168 I2S DAC AMP with 2-wire speaker; LiPo pack 3.3V/5V/VBAT headers; Mini-Joystick header **SCL SDA V G**, buttons A B C D + PB.
 
 ## Bill of materials
 
 | Qty | Part | Notes |
 |---|---|---|
-| 1 | HiLetgo ESP32-S3-DevKitC **N16R8** | UART USB-C flash |
+| 1 | **YD-ESP32-S3** / HiLetgo **N16R8** | Dual USB-C. Flash **UART/COM**, not OTG |
 | 1 | Waveshare **2 inch** ST7789T3 + TF | Power **3V3**; module **VCC** = NC |
-| 1 | **Nulllabs I2C Joystick** `0x5A` | Analog XY, **PB**, **A B C D**. No Start/Select |
-| 2 | 6×6 mm tactile (4-pin OK) | **Start** GPIO 5, **Select** GPIO 6, other side GND |
-| 1 | **Nulllabs NS4168 3W Audio amp w/Speaker** | I2S G V BCL LRC DIN + 2-wire speaker |
-| 1 | Nulllabs LiPo pack | 3.3 V and 5 V |
+| 1 | **Nulllabs I2C Joystick** `0x5A` | Header **SCL SDA V G**. XY, PB, A B C D. No Start/Select |
+| 2 | 6×6 mm tactile (4-pin OK) | GPIO **5** Start, GPIO **6** Select, other side GND |
+| 1 | **Nulllabs NS4168 3W Audio amp w/Speaker** | I2S **G V BCL LRC DIN** + speaker +/− |
+| 1 | Nulllabs LiPo pack | Headers **VBAT / 5V / 3V3**. USB-C charge. USB-A is 5 V 1 A |
+| 1 | 400-point breadboard (optional) | Holds the two tactiles |
 
 ## Button map
 
@@ -30,7 +45,7 @@ GPIO nets use **2.54 mm DuPont**. Speaker is a **2-wire** pair on the amp. Touch
 
 ## Harness 1 — power
 
-Red pack 5 V → DevKit 5V and amp Power V. Orange pack 3.3 V → LCD **3V3** and joystick VCC. Black star GND. Unplug pack 5 V while UART USB-C supplies 5 V.
+Pack **5V** → DevKit 5V and amp Power V. Pack **3V3** → LCD 3V3 and joystick V. Star GND. Unplug pack 5 V from the DevKit while UART USB-C supplies 5 V. Do not feed DevKit from pack USB-A and the 5V header at the same time.
 
 ## Harness 2 — SPI2
 
@@ -38,7 +53,7 @@ Red pack 5 V → DevKit 5V and amp Power V. Orange pack 3.3 V → LCD **3V3** an
 
 ## Harness 3 — Nulllabs I2C Joystick
 
-17 SDA, 18 SCL, 100 kHz, `0x5A`.
+17 SDA, 18 SCL, 100 kHz, `0x5A`. Module header order **SCL SDA V G**.
 
 ## Harness 4 — Nulllabs NS4168 amp I2S
 
@@ -46,20 +61,16 @@ Red pack 5 V → DevKit 5V and amp Power V. Orange pack 3.3 V → LCD **3V3** an
 
 ## Harness 5 — speaker
 
-Amp **+** red → speaker +. Amp **−** black → speaker −. Not a GPIO.
+Amp **+** red → speaker +. Amp **−** black → speaker −.
 
 ## Harness 6 — Start / Select tactiles
 
-| Color | DevKit | Switch |
-|---|---|---|
-| Grey | **GPIO 5** | Start, one terminal |
-| Grey | **GPIO 6** | Select, one terminal |
-| Black | **GND** | other terminal of each switch |
+GPIO **5** and GPIO **6** each to one side of a tactile; other side **GND**. Internal pull-up. No resistor. On a 4-pin 6×6, use **opposite** pins (adjacent pins on one side are already shorted inside the switch).
 
-No external resistor. Firmware enables internal pull-up; press is **to GND**. Use 6×6 mm or 12×12 mm. Either pair of opposite pins on a 4-pin tactile is the switch.
+Breadboard: GPIO 5 → row, switch across the ditch to GND rail. Same for GPIO 6.
 
 ## Forbidden
 
-Used now: **4, 5, 6, 9, 10, 11, 12, 13, 14, 17, 18, 21, 40, 41, 42**. Leave **8** open.
+Used: **4, 5, 6, 9, 10, 11, 12, 13, 14, 17, 18, 21, 40, 41, 42**. Leave **8** open.
 
-Never: 0, 3, 19–20, 26–37, 43–46, 48.
+Never: 0, 3, 19–20 (USB), 26–37 (flash/PSRAM), 43–46 (UART0/strap), 48 (RGB).
