@@ -22,11 +22,13 @@ MCU is a **YD-ESP32-S3 2022-V1.3** N16R8 (DevKitC-1 clone). Flash on the **UART 
 
 <img src="docs/hardware/lipo-pack.jpg" width="520" alt="Nulllabs 1200mAh LiPo pack">
 
-Start/Select tactiles sit on a 400-point breadboard (or fly leads). Opposite pins of a 4-pin 6×6 mm switch are the two terminals.
+Start/Select: two **6×6 mm 4-pin tactiles** on a 400-point breadboard (or fly leads). Opposite pins are the switch; adjacent pins on one side are already shorted inside.
+
+<img src="docs/hardware/tactile.jpg" width="360" alt="6x6 mm 4-pin tactile Start/Select">
 
 <img src="docs/hardware/breadboard.jpg" width="360" alt="400-point breadboard for Start/Select tactiles">
 
-Still needed one-at-a-time: NS4168 amp + speaker, tactiles.
+Still needed: **NS4168 amp + speaker** (one photo).
 
 ## Bill of materials
 
