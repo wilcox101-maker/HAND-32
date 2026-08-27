@@ -20,7 +20,7 @@
 #define RG_AUDIO_USE_INT_DAC        0
 #define RG_AUDIO_USE_EXT_DAC        1
 
-#define RG_SCREEN_DRIVER            0   /* ili9341.h path also drives ST7789 */
+#define RG_SCREEN_DRIVER            0
 #define RG_SCREEN_HOST              SPI2_HOST
 #define RG_SCREEN_SPEED             SPI_MASTER_FREQ_40M
 #define RG_SCREEN_BACKLIGHT         1
@@ -30,7 +30,9 @@
 #define RG_SCREEN_VISIBLE_AREA      {0, 0, 0, 0}
 #define RG_SCREEN_SAFE_AREA         {0, 0, 0, 0}
 
-/* Waveshare 2inch landscape. If still mirrored, try 0xA0, 0x60, 0xE0, 0x00. */
+/* Held 500ms at boot. GPIO 5 only — I2C must not open recovery. */
+#define RG_RECOVERY_BTN            RG_KEY_START
+
 #define RG_SCREEN_INIT() \
     ILI9341_CMD(0x36, 0x70); \
     ILI9341_CMD(0xB2, 0x0C, 0x0C, 0x00, 0x33, 0x33); \
@@ -79,4 +81,4 @@
 }
 
 #define RG_NULLLAB_JOY_ADDR         0x5A
-#define RG_NULLLAB_JOY_DEAD         40
+#define RG_NULLLAB_JOY_DEAD         50
