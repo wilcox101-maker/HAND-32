@@ -4,6 +4,7 @@
  * https://github.com/ducalex/retro-go
  *
  * Input is GPIO tactiles (active-low, internal pull-up, other side GND).
+ * Do not #define RG_GAMEPAD_I2C_MAP.
  * Do not #define RG_GPIO_SND_AMP_ENABLE — gpio_reset_pin(-1) panics.
  */
 #pragma once
@@ -12,13 +13,15 @@
 
 #define RG_STORAGE_ROOT             "/sd"
 #define RG_STORAGE_SDSPI_HOST       SPI2_HOST
-#define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_PROBING
+/* 20 MHz. Was SDMMC_FREQ_PROBING (400 kHz) on the shared LCD/SD SPI2 bus. */
+#define RG_STORAGE_SDSPI_SPEED      SDMMC_FREQ_DEFAULT
 
 #define RG_AUDIO_USE_INT_DAC        0
 #define RG_AUDIO_USE_EXT_DAC        1
 
 #define RG_SCREEN_DRIVER            0
 #define RG_SCREEN_HOST              SPI2_HOST
+/* 40 MHz is stable on Dupont. Do not set 80 MHz until PCB traces. */
 #define RG_SCREEN_SPEED             SPI_MASTER_FREQ_40M
 #define RG_SCREEN_BACKLIGHT         1
 #define RG_SCREEN_WIDTH             320
