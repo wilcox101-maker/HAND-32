@@ -7,6 +7,7 @@ Not a fork. Retro-Go stays upstream:
 
 Nulllabs I2C Joystick has XY, PB, A, B, C, D — no Start/Select.
 Those two keys are GPIO 5 / 6 tactiles (config.h RG_GAMEPAD_GPIO_MAP).
+Analog rest is sampled on first read (this SKU idles near 0, not 128).
 """
 from __future__ import annotations
 
@@ -17,37 +18,36 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 MARKER = "RG_TARGET_HILETGO_WS2_NS4168"
 APPS = "launcher retro-core prboom-go gwenesis fmsx"
+BEGIN = "/* HAND32-I2C-BEGIN */"
+END = "/* HAND32-I2C-END */"
 
-INPUT_SNIPPET = r'''
+INPUT_BODY = r'''
 #if defined(RG_GAMEPAD_I2C_MAP)
 #if defined(RG_TARGET_HILETGO_WS2_NS4168)
+    /* HAND32-I2C-BEGIN */
     {
         uint8_t d[6] = {0};
         if (rg_i2c_read(0x5A, -1, d, 6))
         {
-            const int dead = 40;
-            if (d[0] < 128 - dead) state |= RG_KEY_LEFT;
-            if (d[0] > 128 + dead) state |= RG_KEY_RIGHT;
-            if (d[1] < 128 - dead) state |= RG_KEY_UP;
-            if (d[1] > 128 + dead) state |= RG_KEY_DOWN;
-            /* Nulllabs: A B C D PB. Start/Select are GPIO tactiles, not I2C. */
-            if (d[2] > 1 || d[3] > 1)
+            const int dead = 50;
+            static int cx = -1, cy = -1;
+            if (cx < 0) { cx = d[0]; cy = d[1]; }
+            if (d[0] < cx - dead) state |= RG_KEY_LEFT;
+            if (d[0] > cx + dead) state |= RG_KEY_RIGHT;
+            if (d[1] < cy - dead) state |= RG_KEY_UP;
+            if (d[1] > cy + dead) state |= RG_KEY_DOWN;
+            uint8_t b = d[2];
+            if (b && b != 0xFF)
             {
-                if (d[2] & 1)  state |= RG_KEY_A;
-                if (d[2] & 2)  state |= RG_KEY_B;
-                if (d[2] & 4)  state |= RG_KEY_X;     /* C */
-                if (d[2] & 8)  state |= RG_KEY_Y;     /* D */
-                if (d[2] & 16) state |= RG_KEY_MENU;  /* PB */
-            }
-            else
-            {
-                if (d[2]) state |= RG_KEY_A;
-                if (d[3]) state |= RG_KEY_B;
-                if (d[4]) state |= RG_KEY_X;
-                if (d[5]) state |= RG_KEY_Y;
+                if (b & 1)  state |= RG_KEY_A;
+                if (b & 2)  state |= RG_KEY_B;
+                if (b & 4)  state |= RG_KEY_X;
+                if (b & 8)  state |= RG_KEY_Y;
+                if (b & 16) state |= RG_KEY_MENU;
             }
         }
     }
+    /* HAND32-I2C-END */
 #else
     uint32_t buttons = 0;
 '''
@@ -100,38 +100,27 @@ def apply(root: Path) -> None:
 
     inp = root / "components" / "retro-go" / "rg_input.c"
     src = inp.read_text(encoding="utf-8")
-    if MARKER not in src:
+    if BEGIN in src and END in src:
+        pre, rest = src.split(BEGIN, 1)
+        _, post = rest.split(END, 1)
+        body = INPUT_BODY.split(BEGIN, 1)[1].split(END, 1)[0]
+        src = pre + BEGIN + body + END + post
+        inp.write_text(src, encoding="utf-8")
+        print("refreshed I2C analog calibration + button mask")
+    elif MARKER not in src:
         needle = "#if defined(RG_GAMEPAD_I2C_MAP)\n    uint32_t buttons = 0;\n"
         if needle not in src:
             die("rg_input.c: I2C map block not found; Retro-Go version mismatch")
-        src = src.replace(needle, INPUT_SNIPPET.lstrip("\n") + "\n", 1)
+        src = src.replace(needle, INPUT_BODY.lstrip("\n") + "\n", 1)
         close = "        }\n    }\n#endif\n\n#if defined(RG_GAMEPAD_KBD_MAP)"
         close_new = "        }\n    }\n#endif\n#endif\n\n#if defined(RG_GAMEPAD_KBD_MAP)"
         if close not in src:
             die("rg_input.c: could not close HILETGO I2C branch")
         src = src.replace(close, close_new, 1)
         inp.write_text(src, encoding="utf-8")
+        print("installed I2C joystick block")
     else:
-        # Refresh button map on an already-patched tree (no Start/Select on I2C).
-        old_bits = (
-            "                if (d[2] & 4)  state |= RG_KEY_START;\n"
-            "                if (d[2] & 8)  state |= RG_KEY_SELECT;\n"
-            "                if (d[2] & 16) state |= RG_KEY_MENU;"
-        )
-        new_bits = (
-            "                if (d[2] & 4)  state |= RG_KEY_X;     /* C */\n"
-            "                if (d[2] & 8)  state |= RG_KEY_Y;     /* D */\n"
-            "                if (d[2] & 16) state |= RG_KEY_MENU;  /* PB */"
-        )
-        if old_bits in src:
-            src = src.replace(old_bits, new_bits, 1)
-            src = src.replace(
-                "                if (d[4]) state |= RG_KEY_START;\n                if (d[5]) state |= RG_KEY_SELECT;",
-                "                if (d[4]) state |= RG_KEY_X;\n                if (d[5]) state |= RG_KEY_Y;",
-                1,
-            )
-            inp.write_text(src, encoding="utf-8")
-            print("updated I2C map: A/B/C/D/PB; Start/Select are GPIO 5/6")
+        print("note: I2C block present without markers; copy INPUT from apply.py by hand")
 
     tool = root / "rg_tool.py"
     rt = tool.read_text(encoding="utf-8")
