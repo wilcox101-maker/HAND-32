@@ -3,11 +3,8 @@
  * Retro-Go (c) Alex Duchesne (@ducalex) and contributors, GPLv2.
  * https://github.com/ducalex/retro-go
  *
- * Nulllabs I2C Joystick 0x5A: analog XY, PB, A, B, C, D (no Start/Select).
- * START/SELECT are two active-low tactiles on GPIO 5 / 6.
- *
- * Waveshare 2inch ST7789VW/T3 is natively 240x320. Landscape 320x240 uses
- * MADCTL 0x70 (MX|MV|ML) per Waveshare LCD_2inch HORIZONTAL. INVON 0x21.
+ * Input is 10 active-low tactiles (internal pull-up, other side GND).
+ * I2C joystick is not used in this build.
  */
 #pragma once
 
@@ -30,7 +27,6 @@
 #define RG_SCREEN_VISIBLE_AREA      {0, 0, 0, 0}
 #define RG_SCREEN_SAFE_AREA         {0, 0, 0, 0}
 
-/* Held 500ms at boot. GPIO 5 only — I2C must not open recovery. */
 #define RG_RECOVERY_BTN            RG_KEY_START
 
 #define RG_SCREEN_INIT() \
@@ -61,24 +57,24 @@
 #define RG_GPIO_SDSPI_CLK           GPIO_NUM_12
 #define RG_GPIO_SDSPI_CS            GPIO_NUM_4
 
-#define RG_GPIO_I2C_SDA             GPIO_NUM_17
-#define RG_GPIO_I2C_SCL             GPIO_NUM_18
-
 #define RG_GPIO_SND_I2S_BCK         41
 #define RG_GPIO_SND_I2S_WS          42
 #define RG_GPIO_SND_I2S_DATA        40
-#define RG_GPIO_SND_AMP_ENABLE      8
+#define RG_GPIO_SND_AMP_ENABLE      -1
 
 #define RG_BATTERY_DRIVER           0
 
-#define RG_GAMEPAD_I2C_MAP { \
-    {RG_KEY_A, .num = 31, .level = 1}, \
-}
-
+/* 4-pin 6x6: opposite corners only. One side GPIO, other side GND. */
 #define RG_GAMEPAD_GPIO_MAP { \
-    {RG_KEY_START,  .num = GPIO_NUM_5, .pullup = 1, .level = 0}, \
-    {RG_KEY_SELECT, .num = GPIO_NUM_6, .pullup = 1, .level = 0}, \
+    {RG_KEY_UP,     .num = GPIO_NUM_1,  .pullup = 1, .level = 0}, \
+    {RG_KEY_DOWN,   .num = GPIO_NUM_2,  .pullup = 1, .level = 0}, \
+    {RG_KEY_LEFT,   .num = GPIO_NUM_7,  .pullup = 1, .level = 0}, \
+    {RG_KEY_RIGHT,  .num = GPIO_NUM_8,  .pullup = 1, .level = 0}, \
+    {RG_KEY_A,      .num = GPIO_NUM_15, .pullup = 1, .level = 0}, \
+    {RG_KEY_B,      .num = GPIO_NUM_16, .pullup = 1, .level = 0}, \
+    {RG_KEY_X,      .num = GPIO_NUM_17, .pullup = 1, .level = 0}, \
+    {RG_KEY_Y,      .num = GPIO_NUM_18, .pullup = 1, .level = 0}, \
+    {RG_KEY_START,  .num = GPIO_NUM_5,  .pullup = 1, .level = 0}, \
+    {RG_KEY_SELECT, .num = GPIO_NUM_6,  .pullup = 1, .level = 0}, \
+    {RG_KEY_MENU,   .num = GPIO_NUM_47, .pullup = 1, .level = 0}, \
 }
-
-#define RG_NULLLAB_JOY_ADDR         0x5A
-#define RG_NULLLAB_JOY_DEAD         50
