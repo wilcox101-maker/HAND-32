@@ -1,86 +1,50 @@
 # HAND-32 firmware
 
-This is a **hardware port** of [Retro-Go](https://github.com/ducalex/retro-go) by [ducalex](https://github.com/ducalex) (Alex Duchesne) and contributors. Not a fork. Attribution: [CREDITS.md](CREDITS.md).
+Hardware port of [Retro-Go](https://github.com/ducalex/retro-go) by [ducalex](https://github.com/ducalex) (Alex Duchesne) and contributors. Not a fork. [CREDITS.md](CREDITS.md).
 
-Target name: `hiletgo-ws2-ns4168`. Single flash image (`build-img` + `install`).
-
-## Apps in the image
-
-All of these are Retro-Go applications, compiled from upstream.
-
-| App | In firmware | Systems |
-|---|---|---|
-| `launcher` | yes | Menu |
-| `retro-core` | yes | NES, GB, GBC, GW, SG-1000, SMS, GG, Coleco, PCE, Lynx |
-| `gwenesis` | yes | Mega Drive |
-| `prboom-go` | yes | Doom |
-| `fmsx` | yes | MSX |
-
-Cores are compiled in. They are not files on the SD card.
+Target: `hiletgo-ws2-ns4168`. GPIO tactiles only (`RG_GAMEPAD_GPIO_MAP`). No I2C joystick in firmware. No GBA on ESP32-S3.
 
 IDF **5.3.x only**. IDF 6.x fails (`esp_adc_cal`).
 
+## Apps in the image
+
+| App | Systems |
+|---|---|
+| `launcher` | Menu |
+| `retro-core` | NES, GB, GBC, GW, SG-1000, SMS, GG, Coleco, PCE, Lynx |
+| `gwenesis` | Mega Drive |
+| `prboom-go` | Doom |
+| `fmsx` | MSX |
+
+Cores are compiled in. They are not files on the SD card.
+
+## Overlay tunables (`hiletgo-ws2-ns4168/config.h`)
+
+| Define | Value | Why |
+|---|---|---|
+| `RG_STORAGE_SDSPI_SPEED` | `SDMMC_FREQ_DEFAULT` (20 MHz) | Shared SPI2 with LCD. Was `PROBING` (400 kHz). |
+| `RG_SCREEN_SPEED` | `SPI_MASTER_FREQ_40M` | Stable on Dupont. |
+| Amp enable | **undefined** | `RG_GPIO_SND_AMP_ENABLE -1` panics. |
+
+If the TF slot CRC-fails, set SD back to `SDMMC_FREQ_PROBING`.
+
 ## Build / flash (one `.img`)
 
-Apps **before** `--target` (Windows argparse).
+Apps **before** `--target`. `--no-networking` keeps CPU/RAM on the cores.
 
 ```
-python rg_tool.py build-fw launcher retro-core prboom-go gwenesis fmsx --target hiletgo-ws2-ns4168
-python rg_tool.py build-img launcher retro-core prboom-go gwenesis fmsx --target hiletgo-ws2-ns4168
+python C:\Users\d.wilcox\HAND-32\hiletgo-ws2-ns4168\apply.py C:\Users\d.wilcox\retro-go
+cd C:\Users\d.wilcox\retro-go
+python rg_tool.py clean --target hiletgo-ws2-ns4168
+python rg_tool.py build-fw --no-networking launcher retro-core prboom-go gwenesis fmsx --target hiletgo-ws2-ns4168
+python rg_tool.py build-img --no-networking launcher retro-core prboom-go gwenesis fmsx --target hiletgo-ws2-ns4168
 python rg_tool.py install --target hiletgo-ws2-ns4168
 ```
 
-`install` writes the image at **0x0** (bootloader + table + all apps). UART USB-C. `--port COMx` if needed. Hold BOOT, tap RST if the port is missing.
-
-`flash` is per-app after a full image exists. Do not use it for the first write.
-
-Rename if you want:
-
-```
-copy retro-go_*_hiletgo-ws2-ns4168.img hand32.img
-python -m esptool --chip esp32s3 write_flash --flash_size detect 0x0 hand32.img
-```
-
-## Partitions
-
-`partitions.csv` is a dummy so IDF builds. Real sizes are `PROJECT_APPS` in Retro-Go's `rg_tool.py`. `apply.py` sets:
-
-| App | Slot |
-|---|---|
-| launcher | 1.125 MB (`0x120000`) |
-| retro-core | 1.125 MB |
-| prboom-go | 896 KB (`0xE0000`) |
-| gwenesis | 1.125 MB |
-| fmsx | 768 KB (`0xC0000`) |
-
-Upstream defaults overflowed on this tree (launcher +1.7K, prboom +49K, fmsx +66K). mkfw can grow slots at pack time; the bumped sizes avoid that. Image is ~4.6 MB in **16 MB** flash. No `--fatsize` — ROMs live on the TF card.
+`install` writes **0x0**. UART USB-C. Hold BOOT, tap RST if needed.
 
 ## SD card (FAT32)
 
-```
-roms/nes
-roms/gb
-roms/gbc
-roms/sms
-roms/gg
-roms/md
-roms/pce
-roms/lnx
-roms/col
-roms/gw
-```
+Unzip ROMs. BIOS under `/retro-go/bios/`. Doom IWADs in `/roms/doom/`.
 
-Doom: IWAD on the card (e.g. `doom.wad` / `doom1.wad`).
-
-BIOS (optional except MSX):
-
-```
-retro-go/bios/gb_bios.bin
-retro-go/bios/gbc_bios.bin
-retro-go/bios/fds_bios.bin
-retro-go/bios/msx/     MSX.ROM MSX2.ROM …
-```
-
-GB/GBC run without BIOS. MSX does not.
-
-**Nulllabs I2C Joystick** = D-pad. **Start+Select = Menu**.
+In-game: **MENU** (GPIO 39) → Options → Speed (turbo), Overclock, Scaling Fit, Filter Off.
