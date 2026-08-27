@@ -30,14 +30,14 @@ If the TF slot CRC-fails, set SD back to `SDMMC_FREQ_PROBING`.
 
 ## Build / flash (one `.img`)
 
-Apps **before** `--target`. `--no-networking` keeps CPU/RAM on the cores.
+`build-fw` takes the app list. `build-img` packs whatever was just built — **no app names**.
 
 ```
 python C:\Users\d.wilcox\HAND-32\hiletgo-ws2-ns4168\apply.py C:\Users\d.wilcox\retro-go
 cd C:\Users\d.wilcox\retro-go
 python rg_tool.py clean --target hiletgo-ws2-ns4168
 python rg_tool.py build-fw --no-networking launcher retro-core prboom-go gwenesis fmsx --target hiletgo-ws2-ns4168
-python rg_tool.py build-img --no-networking launcher retro-core prboom-go gwenesis fmsx --target hiletgo-ws2-ns4168
+python rg_tool.py build-img --no-networking --target hiletgo-ws2-ns4168
 python rg_tool.py install --target hiletgo-ws2-ns4168
 ```
 
