@@ -14,18 +14,20 @@ ESP-IDF **5.3.x** only. Input is **GPIO-only** (no I2C joystick in firmware).
 
 ## Flash (IDF 5.3.5 shell)
 
+Windows argparse: **flags before the command**. Apps only on `build-fw`.
+
 ```
 cd C:\Users\d.wilcox\HAND-32
 git pull
 python hiletgo-ws2-ns4168\apply.py C:\Users\d.wilcox\retro-go
 cd C:\Users\d.wilcox\retro-go
-python rg_tool.py clean --target hiletgo-ws2-ns4168
-python rg_tool.py build-fw --no-networking launcher retro-core prboom-go gwenesis fmsx --target hiletgo-ws2-ns4168
-python rg_tool.py build-img --no-networking --target hiletgo-ws2-ns4168
-python rg_tool.py install --target hiletgo-ws2-ns4168
+python rg_tool.py --target hiletgo-ws2-ns4168 clean
+python rg_tool.py --no-networking --target hiletgo-ws2-ns4168 build-fw launcher retro-core prboom-go gwenesis fmsx
+python rg_tool.py --no-networking --target hiletgo-ws2-ns4168 build-img
+python rg_tool.py --target hiletgo-ws2-ns4168 --port COM3 install
 ```
 
-`build-fw` takes the app list. `build-img` does **not**. One `.img` at **0x0** on UART USB-C (not OTG).
+One `.img` at **0x0** on UART USB-C (not OTG). Unplug pack **5V** while flashing.
 
 ## License
 
