@@ -21,7 +21,10 @@ END = "/* HAND32-I2C-END */"
 INNER = r'''    /* HAND32-I2C-BEGIN */
     {
         uint8_t d[6] = {0};
-        if (rg_i2c_read(0x5A, -1, d, 6))
+        bool ok = rg_i2c_read(0x5A, 0, d, 6);
+        if (!ok)
+            ok = rg_i2c_read(0x5A, -1, d, 6);
+        if (ok)
         {
             const int dead = 50;
             static int cx = -1, cy = -1;
@@ -132,6 +135,14 @@ def apply(root: Path) -> None:
             die("rg_input.c: could not migrate unmarked I2C block")
         inp.write_text(src2, encoding="utf-8")
         print("migrated I2C block to calibrated analog")
+
+    i2c = root / "components" / "retro-go" / "rg_i2c.c"
+    it = i2c.read_text(encoding="utf-8")
+    if ".master.clk_speed = 400000" in it:
+        i2c.write_text(it.replace(".master.clk_speed = 400000", ".master.clk_speed = 100000", 1), encoding="utf-8")
+        print("I2C clock set to 100 kHz (STM32 joystick)")
+    elif ".master.clk_speed = 100000" in it:
+        print("I2C clock already 100 kHz")
 
     tool = root / "rg_tool.py"
     rt = tool.read_text(encoding="utf-8")
