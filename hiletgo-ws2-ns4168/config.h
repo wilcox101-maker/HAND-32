@@ -3,8 +3,8 @@
  * Retro-Go (c) Alex Duchesne (@ducalex) and contributors, GPLv2.
  * https://github.com/ducalex/retro-go
  *
- * Input is 10 active-low tactiles (internal pull-up, other side GND).
- * I2C joystick is not used in this build.
+ * Input is GPIO tactiles (active-low, internal pull-up, other side GND).
+ * Do not #define RG_GPIO_SND_AMP_ENABLE — gpio_reset_pin(-1) panics.
  */
 #pragma once
 
@@ -40,7 +40,7 @@
     ILI9341_CMD(0xC4, 0x20); \
     ILI9341_CMD(0xC6, 0x0F); \
     ILI9341_CMD(0xD0, 0xA4, 0xA1); \
-    ILI9341_CMD(0xE0, 0xD0, 0x08, 0x11, 0x08, 0x0C, 0x15, 0x39, 0x33, 0x50, 0x36, 0x13, 0x14, 0x29, 0x2D); \
+    ILI9341_CMD(0xE0, 0xD0, 0x08, 0x11, 0x08, 0x0C, 0x15, 0x39, 0x33, 0x50, 0x36, 0x13, 0x14, 0x2F, 0x2D); \
     ILI9341_CMD(0xE1, 0xD0, 0x08, 0x10, 0x08, 0x06, 0x06, 0x39, 0x44, 0x51, 0x0B, 0x16, 0x14, 0x2F, 0x31); \
     ILI9341_CMD(0x21);
 
@@ -60,7 +60,7 @@
 #define RG_GPIO_SND_I2S_BCK         41
 #define RG_GPIO_SND_I2S_WS          42
 #define RG_GPIO_SND_I2S_DATA        40
-#define RG_GPIO_SND_AMP_ENABLE      -1
+/* NS4168 has no mute GPIO. Do not define AMP_ENABLE as -1. */
 
 #define RG_BATTERY_DRIVER           0
 
@@ -76,5 +76,5 @@
     {RG_KEY_Y,      .num = GPIO_NUM_18, .pullup = 1, .level = 0}, \
     {RG_KEY_START,  .num = GPIO_NUM_5,  .pullup = 1, .level = 0}, \
     {RG_KEY_SELECT, .num = GPIO_NUM_6,  .pullup = 1, .level = 0}, \
-    {RG_KEY_MENU,   .num = GPIO_NUM_47, .pullup = 1, .level = 0}, \
+    {RG_KEY_MENU,   .num = GPIO_NUM_39, .pullup = 1, .level = 0}, \
 }
