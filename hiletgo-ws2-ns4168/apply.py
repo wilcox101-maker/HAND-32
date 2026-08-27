@@ -81,7 +81,7 @@ def apply(root: Path) -> None:
     print(f"ok: target hiletgo-ws2-ns4168 installed in {root}")
     print("firmware: Retro-Go by ducalex  https://github.com/ducalex/retro-go")
     print("  python rg_tool.py build-fw --no-networking " + APPS + " --target hiletgo-ws2-ns4168")
-    print("  python rg_tool.py build-img --no-networking " + APPS + " --target hiletgo-ws2-ns4168")
+    print("  python rg_tool.py build-img --no-networking --target hiletgo-ws2-ns4168")
     print("  python rg_tool.py install --target hiletgo-ws2-ns4168")
 
 
