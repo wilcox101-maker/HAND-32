@@ -4,13 +4,10 @@
 Not a fork. Retro-Go stays upstream:
   https://github.com/ducalex/retro-go
   (c) Alex Duchesne (@ducalex) and contributors, GPLv2
-
-Nulllabs I2C Joystick has XY, PB, A, B, C, D — no Start/Select.
-Those two keys are GPIO 5 / 6 tactiles (config.h RG_GAMEPAD_GPIO_MAP).
-Analog rest is sampled on first read (this SKU idles near 0, not 128).
 """
 from __future__ import annotations
 
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -21,10 +18,7 @@ APPS = "launcher retro-core prboom-go gwenesis fmsx"
 BEGIN = "/* HAND32-I2C-BEGIN */"
 END = "/* HAND32-I2C-END */"
 
-INPUT_BODY = r'''
-#if defined(RG_GAMEPAD_I2C_MAP)
-#if defined(RG_TARGET_HILETGO_WS2_NS4168)
-    /* HAND32-I2C-BEGIN */
+INNER = r'''    /* HAND32-I2C-BEGIN */
     {
         uint8_t d[6] = {0};
         if (rg_i2c_read(0x5A, -1, d, 6))
@@ -48,9 +42,14 @@ INPUT_BODY = r'''
         }
     }
     /* HAND32-I2C-END */
-#else
-    uint32_t buttons = 0;
 '''
+
+INPUT_FIRST = (
+    "#if defined(RG_GAMEPAD_I2C_MAP)\n"
+    "#if defined(RG_TARGET_HILETGO_WS2_NS4168)\n"
+    + INNER
+    + "#else\n    uint32_t buttons = 0;\n"
+)
 
 CONFIG_ELIF = '''#elif defined(RG_TARGET_HILETGO_WS2_NS4168)
 #include "targets/hiletgo-ws2-ns4168/config.h"
@@ -103,15 +102,14 @@ def apply(root: Path) -> None:
     if BEGIN in src and END in src:
         pre, rest = src.split(BEGIN, 1)
         _, post = rest.split(END, 1)
-        body = INPUT_BODY.split(BEGIN, 1)[1].split(END, 1)[0]
-        src = pre + BEGIN + body + END + post
+        src = pre + BEGIN + INNER.split(BEGIN, 1)[1].split(END, 1)[0] + END + post
         inp.write_text(src, encoding="utf-8")
         print("refreshed I2C analog calibration + button mask")
     elif MARKER not in src:
         needle = "#if defined(RG_GAMEPAD_I2C_MAP)\n    uint32_t buttons = 0;\n"
         if needle not in src:
             die("rg_input.c: I2C map block not found; Retro-Go version mismatch")
-        src = src.replace(needle, INPUT_BODY.lstrip("\n") + "\n", 1)
+        src = src.replace(needle, INPUT_FIRST, 1)
         close = "        }\n    }\n#endif\n\n#if defined(RG_GAMEPAD_KBD_MAP)"
         close_new = "        }\n    }\n#endif\n#endif\n\n#if defined(RG_GAMEPAD_KBD_MAP)"
         if close not in src:
@@ -120,7 +118,20 @@ def apply(root: Path) -> None:
         inp.write_text(src, encoding="utf-8")
         print("installed I2C joystick block")
     else:
-        print("note: I2C block present without markers; copy INPUT from apply.py by hand")
+        pat = re.compile(
+            r"#if defined\(RG_TARGET_HILETGO_WS2_NS4168\)\s*\{.*?\}\s*#else\s*uint32_t buttons = 0;",
+            re.S,
+        )
+        repl = (
+            "#if defined(RG_TARGET_HILETGO_WS2_NS4168)\n"
+            + INNER
+            + "#else\n    uint32_t buttons = 0;"
+        )
+        src2, n = pat.subn(repl, src, count=1)
+        if n != 1:
+            die("rg_input.c: could not migrate unmarked I2C block")
+        inp.write_text(src2, encoding="utf-8")
+        print("migrated I2C block to calibrated analog")
 
     tool = root / "rg_tool.py"
     rt = tool.read_text(encoding="utf-8")
