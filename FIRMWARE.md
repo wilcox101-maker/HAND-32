@@ -34,7 +34,9 @@ If the TF slot CRC-fails, set SD back to `SDMMC_FREQ_PROBING`.
 `build-fw` takes the app list. `build-img` does **not**.
 
 ```
-python C:\Users\d.wilcox\HAND-32\hiletgo-ws2-ns4168\apply.py C:\Users\d.wilcox\retro-go
+cd C:\Users\d.wilcox\HAND-32
+git pull
+python hiletgo-ws2-ns4168\apply.py C:\Users\d.wilcox\retro-go
 cd C:\Users\d.wilcox\retro-go
 python rg_tool.py clean --target hiletgo-ws2-ns4168
 python rg_tool.py build-fw --no-networking launcher retro-core prboom-go gwenesis fmsx --target hiletgo-ws2-ns4168
@@ -42,18 +44,34 @@ python rg_tool.py build-img --no-networking --target hiletgo-ws2-ns4168
 python rg_tool.py install --target hiletgo-ws2-ns4168 --port COM3
 ```
 
-UART USB-C, not OTG. If `Failed to connect ... No serial data received`:
-
-1. Unplug pack **5V** from the DevKit.
-2. Hold **BOOT**, tap **RST**, keep BOOT until esptool says Connecting.
-3. Fallback:
+UART USB-C, not OTG. Unplug pack **5V** from the DevKit while flashing. If `No serial data received`: hold **BOOT**, tap **RST**, keep BOOT until Connecting.
 
 ```
 python -m esptool --chip esp32s3 --port COM3 --before no_reset write_flash --flash_size detect 0x0 retro-go_*_hiletgo-ws2-ns4168.img
 ```
 
-## SD card (FAT32)
+## SD card
 
-Unzip ROMs. BIOS under `/retro-go/bios/`. Doom IWADs in `/roms/doom/`.
+ESP32 SDSPI wants **MBR + one FAT32 primary**. Not exFAT. Not GPT.
+
+| Card | Do this |
+|---|---|
+| **16–32 GB** Class 10 | Best. Full-card FAT32, 32 KB clusters. |
+| **128 GB** | Do **not** FAT32 the whole card. **MBR**, first partition **32 GB FAT32 32 KB**, rest unallocated. |
+
+Windows will not FAT32 anything >32 GB in Explorer. Use Disk Management (MBR + 32 GB simple volume, FAT32) or [guiformat](http://ridgecrop.co.uk/index.htm?guiformat.htm) only if you insist on one full-card FAT32 (worse mount/init current).
+
+Copy unzipped ROMs after format:
+
+```
+roms\nes  roms\gb  roms\gbc  roms\sms  roms\gg  roms\md
+roms\doom  roms\pce  roms\lnx  roms\col  roms\gw  roms\msx
+retro-go\bios\gb_bios.bin
+retro-go\bios\gbc_bios.bin
+retro-go\bios\fds_bios.bin
+retro-go\bios\msx\
+```
+
+Eject the reader before pulling the card. Play on **battery**. LCD **VCC = NC**, **3V3** from pack.
 
 In-game: **MENU** (GPIO 39) → Options → Speed (turbo), Overclock, Scaling Fit, Filter Off.
