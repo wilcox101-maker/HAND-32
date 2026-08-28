@@ -2,8 +2,6 @@
 
 Target `hiletgo-ws2-ns4168` for **[Retro-Go](https://github.com/ducalex/retro-go)** by [ducalex](https://github.com/ducalex) and contributors. Port overlay, not a fork. [CREDITS.md](CREDITS.md).
 
-Current firmware is **GPIO tactiles only**. Do not connect the Nulllabs I2C stick — GPIO **17/18** are **X/Y**.
-
 GPIO nets: **2.54 mm DuPont**. Speaker: **2-wire** on the amp. Touch **NC**. LCD **VCC = NC**.
 
 ![HAND-32 DuPont wiring](wiring.svg)
@@ -16,19 +14,15 @@ MCU is a **YD-ESP32-S3 2022-V1.3** N16R8 (DevKitC-1 clone). Flash on the **UART 
 
 <img src="docs/hardware/esp32-s3-front.jpg" width="420" alt="YD-ESP32-S3 chip side">
 
-Nulllabs I2C Mini-Joystick is **not used** by this firmware (photo kept for the BOM leftover).
-
-<img src="docs/hardware/joystick.jpg" width="560" alt="Nulllabs Mini-Joystick I2C 0x5A unused">
-
 **Nulllabs LiPo pack** 1200 mAh. Headers **VBAT / 5V / 3V3**. USB-C charge (max 5 V 1.2 A). USB-A output 5 V 1 A. Use the **5V** and **3V3** headers, not USB-A, for the handheld.
 
 <img src="docs/hardware/lipo-pack.jpg" width="520" alt="Nulllabs 1200mAh LiPo pack">
 
-Tactiles: **6×6 mm 4-pin** on a 400-point breadboard. Opposite pins are the switch; adjacent pins on one side are already shorted inside.
+Controls are **6×6 mm 4-pin tactiles** on an Adafruit **Perma-Proto half-size** (or a 400-point breadboard). Opposite pins are the switch; adjacent pins on one side are already shorted inside.
 
 <img src="docs/hardware/tactile.jpg" width="360" alt="6x6 mm 4-pin tactile">
 
-<img src="docs/hardware/breadboard.jpg" width="360" alt="400-point breadboard for GPIO pad">
+<img src="docs/hardware/breadboard.jpg" width="360" alt="400-point / Perma-Proto pad">
 
 **Nulllabs NS4168 3W Audio amp w/Speaker**: I2S **G V BCL LRC DIN**, speaker +/− 2-wire.
 
@@ -38,10 +32,10 @@ Tactiles: **6×6 mm 4-pin** on a 400-point breadboard. Opposite pins are the swi
 |---|---|---|
 | 1 | **YD-ESP32-S3** / HiLetgo **N16R8** | Dual USB-C. Flash **UART/COM**, not OTG |
 | 1 | Waveshare **2 inch** ST7789T3 + TF | Power **3V3**; module **VCC** = NC |
-| 11 | 6×6 mm tactile (4-pin OK) | U/D/L/R A/B/X/Y Start/Select Menu. Other side GND |
+| 11 | 6×6 mm tactile (4-pin) | U/D/L/R A/B/X/Y Start/Select Menu. Other side GND |
+| 1 | Adafruit Perma-Proto **half-size** | Or 400-point breadboard |
 | 1 | **Nulllabs NS4168 3W Audio amp w/Speaker** | I2S **G V BCL LRC DIN** + speaker +/− |
 | 1 | Nulllabs LiPo pack | Headers **VBAT / 5V / 3V3** |
-| 1 | 400-point breadboard | GPIO pad |
 
 ## Button map (active-low, internal pull-up → GND)
 
@@ -53,13 +47,13 @@ Tactiles: **6×6 mm 4-pin** on a 400-point breadboard. Opposite pins are the swi
 | 8 | Right |
 | 15 | A |
 | 16 | B |
-| 17 | X (C) |
-| 18 | Y (D) |
-| 5 | Start (also recovery) |
+| 17 | X |
+| 18 | Y |
+| 5 | Start (recovery) |
 | 6 | Select |
 | 39 | Menu |
 
-4-pin 6×6: **opposite corners** only.
+4-pin 6×6: **opposite corners** only. Do not straddle the Perma-Proto center ditch on one switch.
 
 ## Harness 1 — power
 
@@ -73,7 +67,7 @@ LCD **VCC stays NC**. Unplug pack **5V** from the DevKit while UART USB-C suppli
 
 ## Harness 3 — GPIO pad
 
-Each GPIO above to one side of a tactile; other side **GND**. No I2C cable. GPIO 17/18 are X/Y, not SDA/SCL.
+Each GPIO above to one side of a tactile; other side **GND** (one Perma-Proto rail). Internal pull-up. No extra resistor.
 
 ## Harness 4 — Nulllabs NS4168 amp I2S
 
