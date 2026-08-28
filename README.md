@@ -6,11 +6,16 @@ Hardware port of **[Retro-Go](https://github.com/ducalex/retro-go)** by **[ducal
 
 - HiLetgo / YD-ESP32-S3-DevKitC **N16R8**
 - Waveshare 2" ST7789T3 + TF (no touch). Module **VCC = NC**, power **3V3**
-- GPIO tactile pad: U/D/L/R, A/B/X/Y, Start/Select, Menu
+- GPIO tactile pad (11× 6×6 mm): U/D/L/R, A/B/X/Y, Start, Select, Menu
+- Adafruit **Perma-Proto half-size** (or 400-point breadboard)
 - **Nulllabs NS4168 3W Audio amp w/Speaker**
 - Nulllabs LiPo pack (headers **5V / 3V3**)
 
-ESP-IDF **5.3.x** only. Input is **GPIO-only** (no I2C joystick in firmware).
+ESP-IDF **5.3.x** only.
+
+## Wiring
+
+![HAND-32 DuPont wiring](wiring.svg)
 
 ## Flash (IDF 5.3.5 shell)
 
