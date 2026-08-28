@@ -1,6 +1,6 @@
 # Credits
 
-HAND-32 is **not a fork**. It is a hardware target overlay that ports [Retro-Go](https://github.com/ducalex/retro-go) onto a HiLetgo ESP32-S3-DevKitC N16R8, Waveshare 2" ST7789T3, NullLab I2C stick, and NS4168 amp.
+HAND-32 is **not a fork**. It is a hardware target overlay that ports [Retro-Go](https://github.com/ducalex/retro-go) onto a HiLetgo ESP32-S3-DevKitC N16R8, Waveshare 2" ST7789T3, GPIO tactile pad, and NS4168 amp.
 
 Clone Retro-Go. Apply this overlay. Build with Retro-Go's `rg_tool.py`. All launcher, cores, and tooling remain upstream.
 
@@ -28,6 +28,6 @@ Firmware for ESP32 handhelds: launcher, save states, cover art, and the emulator
 
 ## This overlay
 
-Pin map, `config.h`, NS4168 / NullLab stick glue, DuPont schedule, and `apply.py` only. Those files: MIT. Combined firmware after `apply.py`: Retro-Go's licenses (GPLv2 + the exceptions above).
+Pin map, `config.h`, NS4168 glue, GPIO pad schedule, and `apply.py` only. Those files: MIT. Combined firmware after `apply.py`: Retro-Go's licenses (GPLv2 + the exceptions above).
 
 Do not vendor or re-publish Retro-Go source in this repo. Point people at [ducalex/retro-go](https://github.com/ducalex/retro-go).
