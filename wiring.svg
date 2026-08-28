@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 900" role="img" aria-label="HAND-32 DuPont wiring">
   <rect width="1280" height="900" fill="#0f1410"/>
   <text x="40" y="32" fill="#d4e8c8" font-family="ui-monospace,Consolas,monospace" font-size="18" font-weight="700">HAND-32  |  DuPont harness</text>
-  <text x="40" y="50" fill="#7a8f74" font-family="ui-monospace,Consolas,monospace" font-size="12">Joystick has no Start/Select. Two tactiles: GPIO 5 Start, GPIO 6 Select, to GND.</text>
+  <text x="40" y="50" fill="#7a8f74" font-family="ui-monospace,Consolas,monospace" font-size="12">11× 6×6 tactiles on Perma-Proto half. Opposite corners. Other side GND.</text>
   <g font-family="ui-sans-serif,Segoe UI,sans-serif">
     <rect x="28" y="66" width="200" height="100" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
     <text x="128" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">Nulllabs LiPo pack</text>
@@ -11,23 +11,18 @@
     <rect x="244" y="66" width="250" height="100" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
     <text x="369" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">HiLetgo S3 N16R8</text>
     <text x="260" y="118" fill="#d4c018" font-size="11">12 11 13 SPI   10 4 CS</text>
-    <text x="260" y="136" fill="#3dba5a" font-size="11">17/18 I2C   41 42 40 I2S</text>
-    <text x="260" y="154" fill="#d0d0d0" font-size="11">5 START   6 SELECT</text>
+    <text x="260" y="136" fill="#3a7bd4" font-size="11">41 42 40 I2S</text>
+    <text x="260" y="154" fill="#d0d0d0" font-size="11">GPIO pad 1 2 7 8 15-18 5 6 39</text>
     <rect x="510" y="66" width="220" height="100" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
     <text x="620" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">Waveshare 2in</text>
     <text x="526" y="118" fill="#f0a020" font-size="11">3V3 (VCC=NC)</text>
     <text x="526" y="136" fill="#d4c018" font-size="11">SCLK MOSI MISO CS DC RST BL</text>
     <text x="526" y="154" fill="#6a4a4a" font-size="11">TP_* NC</text>
-    <rect x="746" y="66" width="230" height="100" rx="10" fill="#1e2a1c" stroke="#6a8f4e" stroke-width="2"/>
-    <text x="861" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">Nulllabs I2C Joystick</text>
-    <text x="861" y="108" text-anchor="middle" fill="#7a8f74" font-size="11">0x5A  XY PB A B C D</text>
-    <text x="762" y="136" fill="#3dba5a" font-size="11">SDA SCL  VCC 3.3  GND</text>
-    <text x="762" y="154" fill="#7a8f74" font-size="11">no Start/Select on module</text>
-    <rect x="992" y="66" width="256" height="100" rx="10" fill="#1e2a1c" stroke="#d0d0d0" stroke-width="2"/>
-    <text x="1120" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">2x tactile</text>
-    <text x="1008" y="118" fill="#d0d0d0" font-size="11">GPIO 5 -- Start -- GND</text>
-    <text x="1008" y="136" fill="#d0d0d0" font-size="11">GPIO 6 -- Select -- GND</text>
-    <text x="1008" y="154" fill="#7a8f74" font-size="11">active-low, internal pull-up</text>
+    <rect x="746" y="66" width="502" height="100" rx="10" fill="#1e2a1c" stroke="#d0d0d0" stroke-width="2"/>
+    <text x="997" y="88" text-anchor="middle" fill="#c6e6a8" font-size="13" font-weight="700">GPIO tactile pad</text>
+    <text x="762" y="118" fill="#d0d0d0" font-size="11">U1 D2 L7 R8   A15 B16 X17 Y18</text>
+    <text x="762" y="136" fill="#d0d0d0" font-size="11">Start 5   Select 6   Menu 39</text>
+    <text x="762" y="154" fill="#7a8f74" font-size="11">Perma-Proto half  |  opposite corners to GND rail</text>
   </g>
   <g font-family="ui-sans-serif,Segoe UI,sans-serif">
     <rect x="28" y="184" width="1224" height="150" rx="12" fill="#1a2218" stroke="#e07a32" stroke-width="2"/>
@@ -50,20 +45,18 @@
     <text x="490" y="296" fill="#7a8f74" font-size="11">41 BCL  42 LRC  40 DIN</text>
   </g>
   <g font-family="ui-monospace,Consolas,monospace" font-size="13">
-    <text x="40" y="364" fill="#9db88e" font-weight="700">1 POWER     2 SPI2     3 I2C     4 I2S     5 SPEAKER     6 TACTILES</text>
+    <text x="40" y="364" fill="#9db88e" font-weight="700">1 POWER     2 SPI2     3 GPIO PAD     4 I2S     5 SPEAKER</text>
     <rect x="40" y="376" width="1200" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
-    <text x="56" y="400" fill="#e8d0cc">Pack 5V - DevKit 5V + amp V.  Pack 3V3 - LCD 3V3 + joystick VCC.  Star GND.</text>
+    <text x="56" y="400" fill="#e8d0cc">Pack 5V - DevKit 5V + amp V.  Pack 3V3 - LCD 3V3.  Star GND.  LCD VCC NC.</text>
     <rect x="40" y="422" width="1200" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
     <text x="56" y="446" fill="#d4c018">12 SCLK  11 MOSI  13 MISO  10 LCD_CS  4 SD_CS  14 DC  9 RST  21 BL</text>
-    <rect x="40" y="468" width="580" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
-    <text x="56" y="492" fill="#3dba5a">17 SDA  18 SCL  0x5A  A/B/C/D/PB</text>
-    <rect x="640" y="468" width="600" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
-    <text x="656" y="492" fill="#3a7bd4">41 BCL  42 LRC  40 DIN</text>
+    <rect x="40" y="468" width="1200" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
+    <text x="56" y="492" fill="#d0d0d0">1 U  2 D  7 L  8 R  15 A  16 B  17 X  18 Y  5 Start  6 Select  39 Menu  — each to GND rail</text>
     <rect x="40" y="514" width="580" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
-    <text x="56" y="538" fill="#e8d0cc">Amp + red / - black to speaker</text>
+    <text x="56" y="538" fill="#3a7bd4">41 BCL  42 LRC  40 DIN</text>
     <rect x="640" y="514" width="600" height="36" rx="8" fill="#161c14" stroke="#2c3a28"/>
-    <text x="656" y="538" fill="#d0d0d0">GPIO 5 Start  GPIO 6 Select  both to GND</text>
+    <text x="656" y="538" fill="#e8d0cc">Amp + red / - black to speaker</text>
   </g>
-  <text x="40" y="580" fill="#7a8f74" font-family="ui-monospace,Consolas,monospace" font-size="12">Never: 0 3 8 (no CTRL) 19 20 26-37 43-46 48. Unplug pack 5V while UART USB-C is plugged in.</text>
+  <text x="40" y="580" fill="#7a8f74" font-family="ui-monospace,Consolas,monospace" font-size="12">Never: 0 3 19 20 26-37 43-46 47 48. Unplug pack 5V while UART USB-C is plugged in.</text>
   <text x="40" y="604" fill="#4a5c46" font-family="ui-monospace,Consolas,monospace" font-size="11">hiletgo-ws2-ns4168  |  Retro-Go by ducalex  |  wilcox101-maker/HAND-32</text>
 </svg>
