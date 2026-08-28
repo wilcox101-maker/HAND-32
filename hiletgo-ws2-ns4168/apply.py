@@ -4,8 +4,6 @@
 Not a fork. Retro-Go stays upstream:
   https://github.com/ducalex/retro-go
   (c) Alex Duchesne (@ducalex) and contributors, GPLv2
-
-GPIO-only input. Does not patch rg_input.c or rg_i2c.c.
 """
 from __future__ import annotations
 
@@ -62,11 +60,6 @@ def apply(root: Path) -> None:
         if old not in text:
             die("components/retro-go/config.h: unexpected format, cannot insert target")
         cfg.write_text(text.replace(old, CONFIG_ELIF, 1), encoding="utf-8")
-
-    inp = root / "components" / "retro-go" / "rg_input.c"
-    if inp.is_file() and "HAND32-I2C-BEGIN" in inp.read_text(encoding="utf-8"):
-        print("note: leftover HAND32 I2C block in rg_input.c is inactive (no RG_GAMEPAD_I2C_MAP)")
-    print("GPIO-only: skipped rg_input.c / rg_i2c.c patches")
 
     tool = root / "rg_tool.py"
     rt = tool.read_text(encoding="utf-8")
