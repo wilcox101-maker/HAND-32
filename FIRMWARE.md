@@ -2,7 +2,7 @@
 
 Hardware port of [Retro-Go](https://github.com/ducalex/retro-go) by [ducalex](https://github.com/ducalex) and contributors. Not a fork. [CREDITS.md](CREDITS.md).
 
-Target: `hiletgo-ws2-ns4168`. GPIO tactiles only. No I2C joystick. No GBA on ESP32-S3.
+Target: `hiletgo-ws2-ns4168`. GPIO tactile pad (`RG_GAMEPAD_GPIO_MAP`). No GBA on ESP32-S3.
 
 IDF **5.3.x only**. IDF 6.x fails (`esp_adc_cal`).
 
@@ -25,13 +25,13 @@ Cores are compiled in. They are not files on the SD card.
 | `RG_STORAGE_SDSPI_SPEED` | `SDMMC_FREQ_DEFAULT` (20 MHz) |
 | `RG_SCREEN_SPEED` | `SPI_MASTER_FREQ_40M` |
 | Amp enable | **undefined** (do not set -1) |
-| Input | `RG_GAMEPAD_GPIO_MAP` |
+| Input | `RG_GAMEPAD_GPIO_MAP` — 11 tactiles |
 
-If the TF slot CRC-fails, set SD back to `SDMMC_FREQ_PROBING`.
+If the TF slot CRC-fails, set SD to `SDMMC_FREQ_PROBING`.
 
 ## Build / flash
 
-Windows argparse: **all flags before the command**. `build-img` takes **no** app names. Do not put `--no-networking` between `build-fw` and the app list — that is the `unrecognized arguments` error.
+Windows argparse: **all flags before the command**. `build-img` takes **no** app names. Do not put `--no-networking` between `build-fw` and the app list.
 
 ```
 cd C:\Users\d.wilcox\HAND-32
@@ -57,7 +57,7 @@ ESP32 SDSPI wants **MBR + one FAT32 primary**. Not exFAT. Not GPT.
 | Card | Do this |
 |---|---|
 | **16–32 GB** Class 10 | Best. Full-card FAT32, 32 KB clusters. |
-| **128 GB** | Do **not** FAT32 the whole card. **MBR**, first partition **32 GB FAT32 32 KB**, rest unallocated. |
+| **128 GB** | **MBR**, first partition **32 GB FAT32 32 KB**, rest unallocated. |
 
 Windows will not FAT32 anything >32 GB in Explorer. Use Disk Management (MBR + 32 GB simple volume, FAT32).
 
